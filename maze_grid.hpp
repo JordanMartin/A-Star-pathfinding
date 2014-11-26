@@ -1,6 +1,8 @@
 #ifndef _GRID_MAZE_H_
 #define _GRID_MAZE_H_
 
+#include <cstdlib>
+
 #include "maze.hpp"
 
 /* Initialisation d'un labyrinthe rectangulaire à cases carrées :

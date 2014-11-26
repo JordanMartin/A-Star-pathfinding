@@ -23,13 +23,14 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=3
-FILE_NAME_0=6590;C++;0;EUTF-8;1;1;0;%2Fhome%2Fetu%2Fm%2Fp1201336%2FBureau%2FLIF9%2FTP9%2Funion_find.hpp;0;4
-FILE_NAME_1=705;C++;0;EUTF-8;1;1;0;%2Fhome%2Fetu%2Fm%2Fp1201336%2FBureau%2FLIF9%2FTP9%2Funion_find.cpp;0;4
-FILE_NAME_2=1522;C++;0;EUTF-8;1;1;0;%2Fhome%2Fetu%2Fm%2Fp1201336%2FBureau%2FLIF9%2FTP9%2Fmaze.cpp;0;4
-FILE_NAME_3=173;C++;0;EUTF-8;1;1;0;%2Fhome%2Fetu%2Fm%2Fp1201336%2FBureau%2FLIF9%2FTP9%2Fmain.cpp;0;4
-FILE_NAME_4=4192;C++;0;EUTF-8;1;1;0;%2Fhome%2Fetu%2Fm%2Fp1201336%2FBureau%2FLIF9%2FTP9%2Fmaze.hpp;0;4
-FILE_NAME_5=371;C++;0;EUTF-8;1;1;0;%2Fhome%2Fetu%2Fm%2Fp1201336%2FBureau%2FLIF9%2FTP9%2Fmaze_grid.cpp;0;4
+current_page=4
+FILE_NAME_0=152;C++;0;EUTF-8;1;1;0;%2Fhome%2Fetu%2Fm%2Fp1201336%2FBureau%2FLIF9-Projet%2Fmain.cpp;0;4
+FILE_NAME_1=36;C++;0;EUTF-8;1;1;0;%2Fhome%2Fetu%2Fm%2Fp1201336%2FBureau%2FLIF9-Projet%2Fmaze_path.cpp;0;4
+FILE_NAME_2=179;C++;0;EUTF-8;1;1;0;%2Fhome%2Fetu%2Fm%2Fp1201336%2FBureau%2FLIF9-Projet%2FAstar.cpp;0;4
+FILE_NAME_3=180;C++;0;EUTF-8;1;1;0;%2Fhome%2Fetu%2Fm%2Fp1201336%2FBureau%2FLIF9-Projet%2FAstar.hpp;0;4
+FILE_NAME_4=1802;C++;0;EUTF-8;1;1;0;%2Fhome%2Fetu%2Fm%2Fp1201336%2FBureau%2FLIF9-Projet%2Fmaze_grid.cpp;0;4
+FILE_NAME_5=166;None;0;EUTF-8;1;1;0;%2Fhome%2Fetu%2Fm%2Fp1201336%2FBureau%2FLIF9-Projet%2FTODO;0;4
+FILE_NAME_6=0;C++;0;EUTF-8;1;1;0;%2Fhome%2Fetu%2Fm%2Fp1201336%2FBureau%2FLIF9-Projet%2Fmaze.cpp;0;4
 
 [VTE]
 last_dir=/home

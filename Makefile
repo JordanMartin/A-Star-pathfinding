@@ -1,12 +1,12 @@
-CC = g++
-CFLAGS = -Wall -ggdb
+CC = g++ 
+CFLAGS = -Wall -ggdb -ansi -pedantic
 EXEC_NAME = maze
-OBJ_FILES = union_find.o maze.o maze_grid.o maze_path.o main.o
+OBJ_FILES = Astar.o union_find.o maze.o maze_grid.o maze_path.o main.o
 
 all: $(EXEC_NAME)
 
 $(EXEC_NAME): $(OBJ_FILES)
-	$(CC) -o $(EXEC_NAME) $(CFLAGS) $(OBJ_FILES)
+	$(CC) $(CFLAGS) -o $(EXEC_NAME) $(OBJ_FILES)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -o $@ -c $<

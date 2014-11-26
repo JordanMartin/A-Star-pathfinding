@@ -4,20 +4,25 @@
 #include "maze.hpp"
 #include "maze_grid.hpp"
 #include "maze_path.hpp"
+#include "Astar.hpp"
 
 int main() {
 
   Maze maze ;
-  int width = 20 ;
-  int height = 20 ;
+  maze.width = 20 ;
+  maze.height = 20 ;
 
   /* initialisation d'un labyrinthe rectangulaire */
-  maze_grid_init(maze, height, width) ;
-  maze_grid_print(maze, height, width) ;
+  maze_grid_init(maze, maze.height, maze.width) ;
+  maze_grid_print(maze, maze.height, maze.width) ;
 
   /* suppression de murs */
   maze_break_walls_clever(maze) ;
-  maze_grid_print(maze, height, width) ;
+  maze_grid_print(maze, maze.height, maze.width) ;
+  
+  
+  astar(maze, 0, maze.tile_size-1);
+  
 
   /* tests */
   int path_tests = 100 ;
@@ -40,7 +45,7 @@ int main() {
   /* recherche de chemin entre deux coins opposés */
   if(maze_find_path(maze, 0, maze.tile_size-1, path_data)) {
     /* chemin trouvé, affichage */
-    maze_grid_print_path(maze, height, width, path_data) ;
+    maze_grid_print_path(maze, maze.height, maze.width, path_data) ;
   } else {
     /* aucun chemin trouvé */
     printf("aucun chemin trouvé entre %d et %d\n", 0, maze.tile_size-1) ;

@@ -83,6 +83,7 @@ struct Tile {
   int* walls ;
   int neighbor_size ;
   int index ;
+  int altitude;
 } ;
 
 /* Le type Maze décrit un labyrinthe :
@@ -93,6 +94,7 @@ struct Tile {
 struct Maze {
   Tile* tiles ;
   int tile_size ;
+  int width, height;
 } ;
 
 /* Destruction des murs du labyrinthe 
