@@ -1,0 +1,47 @@
+[file_prefs]
+final_new_line=true
+ensure_convert_new_lines=false
+strip_trailing_spaces=false
+replace_tabs=false
+
+[indentation]
+indent_width=4
+indent_type=1
+indent_hard_tab_width=8
+detect_indent=false
+detect_indent_width=false
+indent_mode=2
+
+[project]
+name=TP9
+base_path=/.
+description=
+file_patterns=
+
+[long line marker]
+long_line_behaviour=1
+long_line_column=72
+
+[files]
+current_page=3
+FILE_NAME_0=6590;C++;0;EUTF-8;1;1;0;%2Fhome%2Fetu%2Fm%2Fp1201336%2FBureau%2FLIF9%2FTP9%2Funion_find.hpp;0;4
+FILE_NAME_1=705;C++;0;EUTF-8;1;1;0;%2Fhome%2Fetu%2Fm%2Fp1201336%2FBureau%2FLIF9%2FTP9%2Funion_find.cpp;0;4
+FILE_NAME_2=1522;C++;0;EUTF-8;1;1;0;%2Fhome%2Fetu%2Fm%2Fp1201336%2FBureau%2FLIF9%2FTP9%2Fmaze.cpp;0;4
+FILE_NAME_3=173;C++;0;EUTF-8;1;1;0;%2Fhome%2Fetu%2Fm%2Fp1201336%2FBureau%2FLIF9%2FTP9%2Fmain.cpp;0;4
+FILE_NAME_4=4192;C++;0;EUTF-8;1;1;0;%2Fhome%2Fetu%2Fm%2Fp1201336%2FBureau%2FLIF9%2FTP9%2Fmaze.hpp;0;4
+FILE_NAME_5=371;C++;0;EUTF-8;1;1;0;%2Fhome%2Fetu%2Fm%2Fp1201336%2FBureau%2FLIF9%2FTP9%2Fmaze_grid.cpp;0;4
+
+[VTE]
+last_dir=/home
+
+[build-menu]
+EX_00_LB=_Exécuter
+EX_00_CM=make && ./maze
+EX_00_WD=
+C++FT_00_LB=_Compiler
+C++FT_00_CM=make && ./maze
+C++FT_00_WD=
+C++FT_01_LB=Const_ruire
+C++FT_01_CM=make && ./maze
+C++FT_01_WD=
+filetypes=C++;
