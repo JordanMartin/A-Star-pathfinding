@@ -1,14 +1,29 @@
 CC = g++ 
-CFLAGS = -Wall -ggdb -ansi -pedantic
+# try with -Wextra
+CFLAGS = -Wall -g -ansi -pedantic
 EXEC_NAME = maze
-OBJ_FILES = Astar.o union_find.o maze.o maze_grid.o maze_path.o main.o
 
 all: $(EXEC_NAME)
 
-$(EXEC_NAME): $(OBJ_FILES)
-	$(CC) $(CFLAGS) -o $(EXEC_NAME) $(OBJ_FILES)
+$(EXEC_NAME): main.o maze.o Astar.o union_find.o maze_path.o maze_grid.o
+	$(CC) $(CFLAGS) -o $(EXEC_NAME) main.o maze.o Astar.o union_find.o maze_path.o maze_grid.o
 
-%.o: %.c
+main.o: main.cpp
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+maze.o: maze.cpp
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+Astar.o: Astar.cpp
+	$(CC) $(CFLAGS) -o $@ -c $<
+	
+union_find.o: union_find.cpp
+	$(CC) $(CFLAGS) -o $@ -c $<
+	
+maze_grid.o: maze_grid.cpp
+	$(CC) $(CFLAGS) -o $@ -c $<
+	
+maze_path.o: maze_path.cpp
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 simple: CFLAGS += -DMAZE_SIMPLE_DISPLAY
@@ -16,4 +31,4 @@ simple: CFLAGS += -DMAZE_SIMPLE_DISPLAY
 simple: clean $(EXEC_NAME)
 
 clean:
-	rm -rf $(OBJ_FILES) $(EXEC_NAME)
+	rm -rf main.o maze.o Astar.o union_find.o maze_path.o maze_grid.o $(EXEC_NAME)
