@@ -1,6 +1,6 @@
 CC = g++ 
 # try with -Wextra
-CFLAGS = -Wall -g -ansi -pedantic
+CFLAGS =  -g -ansi
 EXEC_NAME = maze
 
 all: $(EXEC_NAME)

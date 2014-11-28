@@ -6,6 +6,7 @@
 #include "maze.hpp"
 #include <set>
 #include <climits>
+#include <iostream>
 
 enum ASColor { BLACK, GREY, WHITE };
 //TODO FIX NAME
