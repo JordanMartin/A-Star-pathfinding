@@ -8,8 +8,6 @@
 #include "maze.hpp"
 #include "union_find.hpp"
 
-enum POS { TOP = 0, LEFT = 1, BOTTOM = 2, RIGHT = 3 };
-
 /* Destruction des murs */
 
 static void break_wall(Tile & tile, int wall_index) {
@@ -58,9 +56,10 @@ void maze_break_walls_clever(Maze & maze) {
 		uf_node_init(nodes[i]);
 	}
 		
-	int a = maze.tile_size;
-	// pour chaque cellule 
-	while(a > 1) {
+	int equiClassCount = maze.tile_size;
+	
+	// Tant qu'il y a plus d'une classe d'équivalence 
+	while(equiClassCount > 1) {
 				
 		i = rand() % maze.tile_size;
 		
@@ -73,13 +72,22 @@ void maze_break_walls_clever(Maze & maze) {
 			}
 		}	
 
+		// On test tous les mur de la case
 		for(int k = 0; k < 4; k++){
-			if(tile->neighbors[k] != NULL && 
-				!uf_are_equivalent_without_compression(nodes[i], neighbor_node[k])){
+			
+			// Si le mur est une bordure de la grille on passe
+			if(tile->neighbors[k] == NULL){
+				continue;
+			}
+			
+			// Si la detruction de ce mur entraine la réunion de deux classe d'équivalences différentes
+			if(!uf_are_equivalent_without_compression(nodes[i], neighbor_node[k])){
+					
+					// Destruction du mur
 					break_wall(*tile, k);
+					// Les deux classes ne forme maintenant plus qu'une
 					uf_union(nodes[i], neighbor_node[k]);
-					a--;
-					std::cout << "Break: " << tile->index << " - " << k << "\n";
+					equiClassCount--;
 			}				
 		}
 	}  
