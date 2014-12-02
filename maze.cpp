@@ -8,6 +8,8 @@
 #include "maze.hpp"
 #include "union_find.hpp"
 
+#define DIFFERENT_POSSIBLE_WAY_COUNT 100
+
 /* Destruction des murs */
 
 static void break_wall(Tile & tile, int wall_index) {
@@ -58,9 +60,12 @@ void maze_break_walls_clever(Maze & maze) {
 		
 	int equiClassCount = maze.tile_size;
 	
+	int alternativeWayCount = 0;
+	
 	// Tant qu'il y a plus d'une classe d'équivalence 
-	while(equiClassCount > 1) {
-				
+	while(equiClassCount > 1 || alternativeWayCount < DIFFERENT_POSSIBLE_WAY_COUNT) {
+		
+		// Selectionne une case de manière aléatoire
 		i = rand() % maze.tile_size;
 		
 		// pointeur sur une case 
@@ -88,6 +93,11 @@ void maze_break_walls_clever(Maze & maze) {
 					// Les deux classes ne forme maintenant plus qu'une
 					uf_union(nodes[i], neighbor_node[k]);
 					equiClassCount--;
+			}
+			// Casse des murs supplémentaire pour créer plusieurs chemins
+			else if(equiClassCount == 1){
+				break_wall(*tile, k);
+				alternativeWayCount++;
 			}				
 		}
 	}  
