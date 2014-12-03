@@ -5,9 +5,12 @@
 #include <cmath>
 #include "maze.hpp"
 #include <set>
+#include <vector>
 #include <climits>
 #include <iostream>
 #include "maze_path.hpp"
+
+typedef int index;
 
 enum ASColor { BLACK, GREY, WHITE };
 //TODO FIX NAME

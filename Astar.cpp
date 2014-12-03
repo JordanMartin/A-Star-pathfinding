@@ -7,6 +7,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+using namespace std;
+
+
 inline int euclidienne_distance(const Maze& maze, const Tile& t1, const Tile& t2){
 	
 	int x_start = t1.index % maze.width;
@@ -20,7 +23,85 @@ inline int euclidienne_distance(const Maze& maze, const Tile& t1, const Tile& t2
 	return sqrt((t2.altitude - t1.altitude)*(t2.altitude - t1.altitude) + dist*dist);
 }
 
-ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_data){
+//on supprime l'element de plus grande priorite 
+void remove_binary_heap(ASNODE* nodes, vector<index> &binary_heap)
+{
+	int size=binary_heap.size();
+	int i=1;
+	int filsd, filsg;
+	index element_to_replace;
+	int priorite;
+	
+	binary_heap[1]=binary_heap[size];
+	element_to_replace=binary_heap[1];
+	 
+	binary_heap.resize(binary_heap.size()-1);
+    size--;
+	
+	filsd = 2*i+1;
+	filsg = 2*i;
+	cout << "size" << size <<endl;
+	//s'il n'existe pas de fils gauche, il n'existe pas de fils droit
+	while (filsg < size)
+	{
+		cout << filsg << endl;
+		cout << filsd << endl << endl;
+		
+		if (filsd < size)
+		{
+			if (nodes[binary_heap[filsd]].dist < nodes[element_to_replace].dist 
+			 || nodes[binary_heap[filsg]].dist < nodes[element_to_replace].dist)
+			{
+				if(nodes[binary_heap[filsg]].dist <= nodes[binary_heap[filsd]].dist)
+					{priorite = filsg;}
+				else
+					{priorite = filsd;}
+				
+				binary_heap[i] = binary_heap[priorite];
+				binary_heap[priorite] = element_to_replace;
+				
+				i = priorite;
+				element_to_replace = binary_heap[i];
+				
+				filsg = 2*i;
+				filsd=2*i+1;
+			}
+			
+			else 
+			{break;}
+	   }
+	   else
+	   {
+		   if (nodes[binary_heap[filsg]].dist < nodes[element_to_replace].dist)
+			{					
+				binary_heap[i] = binary_heap[filsg];
+				binary_heap[filsg] = element_to_replace;
+				break;
+		    }
+		   else 
+			{break;}
+		}
+	}
+}
+
+void insert_binary_heap(ASNODE* nodes, vector<index> &binary_heap, index element)
+{
+	int i, ancester;
+	binary_heap.resize(binary_heap.size()+1);
+	
+	i = binary_heap.size();
+	
+	ancester = i/2; 
+	while ((ancester >= 1) && (nodes[binary_heap[ancester]].dist > nodes[element].dist))
+	{
+		binary_heap[i]=binary_heap[ancester];
+		i=ancester;
+		ancester = i/2;
+	}
+	binary_heap[i]=element;
+}
+
+ASNODE* astar(const Maze& maze, index start_index, index end_index, PathData& path_data){
 	
 	ASNODE* nodes = new ASNODE[maze.tile_size];
 	
@@ -35,37 +116,23 @@ ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_d
 		nodes[i].dist = -1;
 	}
 	
-	// TODO TAS BINAIRE
-	std::set<int> list_grey;
+	//TAS BINAIRE, premiere case vide pour des questions de praticité
+	vector<index> list_grey;
+	list_grey.push_back(-1);
 	//Tile& curr_tile; // = maze.tiles[start_index]
 		
 	int tmp_dist, tmp_curr_dist_min, curr_index_dist_min;
 	
 	// Commence avec la première case 
-	list_grey.insert(start_index);
+	list_grey.push_back(start_index);
 	
 	bool way_founded = false;
 	
 	// TODO Clever condition d'arrêt
-	while(!list_grey.empty() && !way_founded){
+	while(list_grey.size()!=1 && !way_founded){
 		
-		// Selection du gris le plus proche
-		tmp_curr_dist_min = INT_MAX;
-		
-		for(std::set<int>::iterator it = list_grey.begin(); it != list_grey.end(); ++it){
-			
-			tmp_dist = euclidienne_distance(maze, maze.tiles[*it], maze.tiles[end_index]);
-				
-			if(tmp_dist < tmp_curr_dist_min){
-				curr_index_dist_min = *it;
-				tmp_curr_dist_min = tmp_dist;
-			}						
-		}		
-		
-		Tile& curr_tile = maze.tiles[curr_index_dist_min];
+		Tile& curr_tile = maze.tiles[list_grey[1]];
 		ASNODE& curr_node = nodes[curr_tile.index];
-		
-		int lsize = list_grey.size();
 	
 		for(int i = 0; i < curr_tile.neighbor_size; i++){
 			
@@ -96,6 +163,7 @@ ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_d
 			}else{
 				nodes[curr_tile.neighbors[i]->index].parent_index = curr_tile.index;
 				nodes[curr_tile.neighbors[i]->index].color = GREY;
+				insert_binary_heap(nodes, list_grey,curr_tile.neighbors[i]->index);
 			}
 								
 			// Cette case voisine est la case cherchée
@@ -103,15 +171,15 @@ ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_d
 				way_founded = true;
 				break;
 			}
-			
-			// TODO WARNING TAS biNAIRE
+
 			// Cette case voisine est accessible => on l'insere dans le tas binaire
-			list_grey.insert(curr_tile.neighbors[i]->index);
+
 			path_data.status[curr_tile.neighbors[i]->index] = MAZE_PATH_SEARCHED;
 		}
 		
-		// On a visiter tous ses voisins, il devient donc noir
-		list_grey.erase(curr_tile.index);
+		// On a visiter tous ses voisins, il devient donc noir 
+		// Et on supprime l'element de plus grande priorite
+		remove_binary_heap(nodes, list_grey);
 		nodes[curr_tile.index].color = BLACK;
 	}
 	
