@@ -7,6 +7,7 @@
 #include <set>
 #include <climits>
 #include <iostream>
+#include "maze_path.hpp"
 
 enum ASColor { BLACK, GREY, WHITE };
 //TODO FIX NAME
@@ -17,12 +18,7 @@ struct ASNODE {
 	ASColor color;
 };
 
-struct Astar {
-	
-	ASNODE *start, *end;
-};
-
-void astar(const Maze& maze, int start_index, int end_index);
+ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_data);
 
 
 #endif

@@ -6,7 +6,7 @@
 
 /* nettoyage des données de recherche de chemin */
 void maze_path_clean(PathData & data ) {
-  delete data.status;
+  delete[] data.status;
 }
 
 /* affichage d'une case du labyrinthe en fonction des données de chemin */

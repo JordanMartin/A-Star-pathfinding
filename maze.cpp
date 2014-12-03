@@ -8,11 +8,9 @@
 #include "maze.hpp"
 #include "union_find.hpp"
 
-#define DIFFERENT_POSSIBLE_WAY_COUNT 100
-
 /* Destruction des murs */
 
-static void break_wall(Tile & tile, int wall_index) {
+void break_wall(Tile & tile, int wall_index) {
   /* détruire le mur pour la case */
   tile.walls[wall_index] = 0 ;
   /* case voisine par ce mur */
@@ -23,6 +21,34 @@ static void break_wall(Tile & tile, int wall_index) {
     int w ;
     for(w = 0; neigh->neighbors[w] != &tile; ++w) ;
     neigh->walls[w] = 0 ;
+  }
+}
+
+void restore_wall(Tile & tile, int wall_index) {
+  /* détruire le mur pour la case */
+  tile.walls[wall_index] = 1 ;
+  /* case voisine par ce mur */
+  Tile* neigh = tile.neighbors[wall_index] ;
+  if(neigh) {
+    /* une case se trouve de l'autre côté (pas un mur du bord) */
+    /* chercher le mur correspondant pour cette case */
+    int w ;
+    for(w = 0; neigh->neighbors[w] != &tile; ++w) ;
+    neigh->walls[w] = 1 ;
+  }
+}
+
+void swap_wall(Tile & tile, int wall_index) {
+  /* détruire le mur pour la case */
+  tile.walls[wall_index] = tile.walls[wall_index] != 0 ? 0 : 1;
+  /* case voisine par ce mur */
+  Tile* neigh = tile.neighbors[wall_index] ;
+  if(neigh) {
+    /* une case se trouve de l'autre côté (pas un mur du bord) */
+    /* chercher le mur correspondant pour cette case */
+    int w ;
+    for(w = 0; neigh->neighbors[w] != &tile; ++w) ;
+    neigh->walls[w] = neigh->walls[w] != 0 ? 0 : 1;
   }
 }
 
@@ -45,7 +71,7 @@ void maze_break_walls_naive(Maze & maze) {
 /* Votre code ici */
 
 /* Destruction intelligente des murs */
-void maze_break_walls_clever(Maze & maze) {
+void maze_break_walls_clever(Maze & maze, int way_count) {
 	
 	srand(time(NULL));
   
@@ -63,7 +89,7 @@ void maze_break_walls_clever(Maze & maze) {
 	int alternativeWayCount = 0;
 	
 	// Tant qu'il y a plus d'une classe d'équivalence 
-	while(equiClassCount > 1 || alternativeWayCount < DIFFERENT_POSSIBLE_WAY_COUNT) {
+	while(equiClassCount > 1 || alternativeWayCount < (way_count - 1)) {
 		
 		// Selectionne une case de manière aléatoire
 		i = rand() % maze.tile_size;
@@ -101,4 +127,7 @@ void maze_break_walls_clever(Maze & maze) {
 			}				
 		}
 	}  
+	
+	delete[] neighbor_node;
+	delete[] nodes;
 }

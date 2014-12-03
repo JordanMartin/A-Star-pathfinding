@@ -20,42 +20,16 @@ inline int euclidienne_distance(const Maze& maze, const Tile& t1, const Tile& t2
 	return sqrt((t2.altitude - t1.altitude)*(t2.altitude - t1.altitude) + dist*dist);
 }
 
-
-/* affichage d'une case du labyrinthe en fonction des données de chemin */
-static void print_path(const void* data,const Tile & tile) {
-  /* Récupération du statut du chemin */
-  PathData* path_data = (PathData*) data ;
-  /* Couleurs des différents statuts */
-  const char* status_color[6] = {
-    "\x1B[42m", /* vert pour le départ */
-    "\x1B[41m", /* rouge pour l'arrivée */
-    "\x1B[44m", /* bleu  pour une portion de chemin */
-    "\x1B[49m", /* couleur pour une case en dehors */
-    "\x1B[49m", /* couleur pour une case inconnue */
-    "\x1B[49m", /* couleur pour une case recherchée */
-  } ;
-  const char* color_clear = "\x1B[49m" ;
-  /* mise en place de la couleur selon le statut */
-  printf(status_color[path_data->status[tile.index]]) ;
-  /* affichage d'un espace */
-  printf(" ") ;
-  /* remise à zéro de la couleur */
-  printf(color_clear) ;
-}
-
-
-
-void astar(const Maze& maze, int start_index, int end_index){
+ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_data){
 	
 	ASNODE* nodes = new ASNODE[maze.tile_size];
 	
-	PathData data;
 	// Mémorise le chemin en vue de l'afficher
-	data.status = new PathStatus[maze.tile_size];
-	data.data_size = maze.tile_size ;
+	path_data.status = new PathStatus[maze.tile_size];
+	path_data.data_size = maze.tile_size ;
 
 	for(int i = 0; i < maze.tile_size; i++){
-		data.status[i] = MAZE_PATH_UNKNOWN;
+		path_data.status[i] = MAZE_PATH_UNKNOWN;
 		nodes[i].color = WHITE;
 		nodes[i].parent_index = -1;
 		nodes[i].dist = -1;
@@ -70,8 +44,10 @@ void astar(const Maze& maze, int start_index, int end_index){
 	// Commence avec la première case 
 	list_grey.insert(start_index);
 	
+	bool way_founded = false;
+	
 	// TODO Clever condition d'arrêt
-	while(!list_grey.empty()){
+	while(!list_grey.empty() && !way_founded){
 		
 		// Selection du gris plus proche
 		tmp_curr_dist_min = INT_MAX;
@@ -93,8 +69,8 @@ void astar(const Maze& maze, int start_index, int end_index){
 	
 		for(int i = 0; i < curr_tile.neighbor_size; i++){
 			
-			// Obstacle 
-			if(curr_tile.neighbors[i] == NULL){
+			// Case inaccessible ==> Case hors grille ou mur présent
+			if(curr_tile.neighbors[i] == NULL || curr_tile.walls[i] != 0){
 				continue;
 			}
 				
@@ -102,28 +78,35 @@ void astar(const Maze& maze, int start_index, int end_index){
 			if(nodes[curr_tile.neighbors[i]->index].color == BLACK){
 				continue;
 			}
-				
-			nodes[curr_tile.neighbors[i]->index].parent_index = curr_tile.index;
-			nodes[curr_tile.neighbors[i]->index].color = GREY;
 			
 			tmp_dist = nodes[curr_tile.index].dist 
 				+ sqrt(1 + pow(curr_tile.neighbors[i]->altitude - curr_tile.altitude, 2));	
 			
-			if(nodes[curr_tile.neighbors[i]->index].dist == -1 
+			// Cette case est déjà grise, est-ce plus cours via la case curr_tile ?
+			if(nodes[curr_tile.neighbors[i]->index].color == GREY){
+				
+				if(nodes[curr_tile.neighbors[i]->index].dist == -1 
 				|| tmp_dist < nodes[curr_tile.neighbors[i]->index].dist){
+						
+					// Distance = distance du noeud parent + distance euclidienne entre les deux
+					nodes[curr_tile.neighbors[i]->index].dist = tmp_dist;
+				}	
 					
-				// Distance = distance du noeud parent + distance euclidienne entre les deux
-				nodes[curr_tile.neighbors[i]->index].dist = tmp_dist;
-			}			
-			
+			}else{
+				nodes[curr_tile.neighbors[i]->index].parent_index = curr_tile.index;
+				nodes[curr_tile.neighbors[i]->index].color = GREY;
+			}
+								
+			// Cette case voisine est la case cherchée
 			if(curr_tile.neighbors[i]->index == end_index){
-				// Trouvé !!!
+				way_founded = true;
 				break;
 			}
 			
 			// TODO WARNING TAS biNAIRE
 			// Cette case voisine est accéssible => on la coloris en gris
 			list_grey.insert(curr_tile.neighbors[i]->index);
+			path_data.status[curr_tile.neighbors[i]->index] = MAZE_PATH_SEARCHED;
 		}
 		
 		// On a visiter tous ces voisins il devient donc noir
@@ -131,20 +114,22 @@ void astar(const Maze& maze, int start_index, int end_index){
 		nodes[curr_tile.index].color = BLACK;
 	}
 	
+	path_data.status[start_index] = MAZE_PATH_START;
+	path_data.status[end_index] = MAZE_PATH_END;
+
+	if(!way_founded){
+		return nodes;
+	}
 	
+	// Enregistre le chemin trouvé par remonté depuis le dernier
+	int curr_index = nodes[end_index].parent_index;
 	
-	std::cout << "\n Chemin trouvé : \n";
-	int curr_index = end_index;
-	
-	do{
-		data.status[curr_index] = MAZE_PATH_IN;
-		std::cout << "[" << curr_index%maze.width << ", " << curr_index/maze.width << "]\n";
+	while(nodes[curr_index].parent_index != -1){
+		path_data.status[curr_index] = MAZE_PATH_IN;
 		curr_index = nodes[curr_index].parent_index;
-	}while(nodes[curr_index].parent_index != -1);
+		
+	};
 	
-	data.status[start_index] = MAZE_PATH_START;
-	data.status[end_index] = MAZE_PATH_END;
-	
-	maze_grid_print_generic(maze, maze.height, maze.width, 1, 2, &data, print_path);
+	return nodes;
 }
 

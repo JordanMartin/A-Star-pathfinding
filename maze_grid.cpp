@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "maze_grid.hpp"
 
@@ -18,6 +19,8 @@ static Tile* grid_maze_tile(const Maze & maze, int height, int width, int i, int
 
 /* initialization d'un labyrinthe rectangulaire */
 void maze_grid_init(Maze & maze, int height, int width) {
+	
+  srand(time(NULL));
 
   /* retour rapide dans le cas d'un labyrinthe vide */
   if(width == 0 || height == 0) return ;
@@ -68,10 +71,9 @@ void maze_grid_init(Maze & maze, int height, int width) {
 /* Libération de la mémoire d'unlabyrinthe rectangulaire */
 void maze_grid_clean(Maze & maze) {
   /* déallocation de la mémoire des cases */
-  delete maze.tiles[0].neighbors;
-  delete maze.tiles[0].walls;
-  /* déallocation de la mémoire du labyrinthe */
-  delete maze.tiles;
+  delete[] maze.tiles[0].neighbors;
+  delete[] maze.tiles[0].walls;
+  delete[] maze.tiles;
 }
 
 /* Affichage générique d'un labyrinthe */
@@ -104,8 +106,28 @@ void maze_grid_print_generic(const Maze & maze,
 
   /* une case fait deux caractères de large */
   int i, j, k, l ;
+  
+  printf("    ");
+  // Affichage des numéros de colonnes
+  for(i = 0; i < width; ++i) {
+    if(i/10 != 0)
+	  printf("  %d", i/10);
+	else
+	  printf("   ");
+  }
+  printf("\n");
+  printf("    ");
+  // Affichage des numéros de colonnes
+  for(i = 0; i < width; ++i) {
+	  printf("  %d", i%10);
+  }
+  printf("\n");
+  
   /*itération sur les lignes*/
   for(j = 0; j <= height; ++j) {
+	  
+	printf("    ");
+	  
     /* affichage des murs du haut */
     /* pointeurs sur les cases autour du coin haut gauche*/
     Tile *br = NULL, *bl = NULL, *tr = NULL, *tl = NULL ;
@@ -141,8 +163,12 @@ void maze_grid_print_generic(const Maze & maze,
         }
       }
     }
-    printf("\n") ;
+    
+    if( j != height)    printf("\n") ;
 
+	// Affichage du numéro de ligne
+	if(j < height) printf("%3d ", j);
+		
     if(j < height) {
       /* affichage des murs droite gauche */
       for(k = 0; k < tile_height; ++k) {
@@ -162,10 +188,28 @@ void maze_grid_print_generic(const Maze & maze,
             }
           }
         }
+        // Affichage du numéro de ligne
+		printf("%d ", j);
         printf("\n") ;
       }
     }
   }
+  printf("\n");
+   printf("    ");
+  // Affichage des numéros de colonnes
+  for(i = 0; i < width; ++i) {
+    if(i/10 != 0)
+	  printf("  %d", i/10);
+	else
+	  printf("   ");
+  }
+  printf("\n");
+  printf("    ");
+  // Affichage des numéros de colonnes
+  for(i = 0; i < width; ++i) {
+	  printf("  %d", i%10);
+  }
+  printf("\n");
 }
 
 /* fonction par défaut d'affichage des cases */

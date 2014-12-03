@@ -128,6 +128,10 @@ void maze_break_walls_naive(Maze & maze) ;
  * - que deux cases sont toujours reliées, car on traite tous les murs
  */
 
-void maze_break_walls_clever(Maze & maze) ;
+void maze_break_walls_clever(Maze & maze, int alternative_way_count) ;
+
+void break_wall(Tile & tile, int wall_index);
+void restore_wall(Tile & tile, int wall_index);
+void swap_wall(Tile & tile, int wall_index);
 
 #endif
