@@ -19,11 +19,11 @@ void uf_union( UFNode & node1, UFNode & node2 ) {
 	UFNode *root, *sub_root;
 	
 	if(node1.height > node2.height){
-		root = &uf_get_root(node1);
-		sub_root = &uf_get_root(node2);
+		root = &uf_get_root_with_compression(node1);
+		sub_root = &uf_get_root_with_compression(node2);
 	}else{
-		root = &uf_get_root(node2);
-		sub_root = &uf_get_root(node1);
+		root = &uf_get_root_with_compression(node2);
+		sub_root = &uf_get_root_with_compression(node1);
 	}	
 	
 	root->height += sub_root->height;
@@ -61,12 +61,23 @@ const UFNode & uf_get_root_const(const UFNode & node ) {
 	return *root ;
 }
 
+/* parcourir l'arbre de la classe en faisant au fur et a mesure la compression et renvoyer la racine */
+UFNode & uf_get_root_with_compression(UFNode & node ) {
+	
+	
+	if (&node == node.parent)	{return node;}
+	else
+	{
+		node.parent = &uf_get_root_with_compression(*node.parent);
+		return *node.parent;
+	}
+}
+
 /* vérifier si deux noeuds sont dans la même classe */
 int uf_are_equivalent_without_compression(const UFNode & node1,const UFNode & node2 ) {
 	return &uf_get_root_const(node1) == &uf_get_root_const(node2) ;
 }
 
 int uf_are_equivalent_with_compression(UFNode & node1,UFNode & node2 ) {
-	/* Votre code ici à la place de la ligne suivante */
-	return 0 ;
+  return &uf_get_root_with_compression(node1) == &uf_get_root_with_compression(node2) ;
 }

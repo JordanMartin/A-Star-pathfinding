@@ -1,7 +1,7 @@
 #include "Astar.hpp"
 
 
-// TODO REMVOE
+// TODO REMOVE
 #include "maze_path.hpp"
 #include "maze_grid.hpp"
 #include <stdlib.h>
@@ -49,7 +49,7 @@ ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_d
 	// TODO Clever condition d'arrêt
 	while(!list_grey.empty() && !way_founded){
 		
-		// Selection du gris plus proche
+		// Selection du gris le plus proche
 		tmp_curr_dist_min = INT_MAX;
 		
 		for(std::set<int>::iterator it = list_grey.begin(); it != list_grey.end(); ++it){
@@ -79,6 +79,7 @@ ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_d
 				continue;
 			}
 			
+			// Distance = distance du noeud parent + distance euclidienne entre les deux
 			tmp_dist = nodes[curr_tile.index].dist 
 				+ sqrt(1 + pow(curr_tile.neighbors[i]->altitude - curr_tile.altitude, 2));	
 			
@@ -88,7 +89,7 @@ ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_d
 				if(nodes[curr_tile.neighbors[i]->index].dist == -1 
 				|| tmp_dist < nodes[curr_tile.neighbors[i]->index].dist){
 						
-					// Distance = distance du noeud parent + distance euclidienne entre les deux
+					//On met a jour la distance du noeud gris
 					nodes[curr_tile.neighbors[i]->index].dist = tmp_dist;
 				}	
 					
@@ -104,12 +105,12 @@ ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_d
 			}
 			
 			// TODO WARNING TAS biNAIRE
-			// Cette case voisine est accéssible => on la coloris en gris
+			// Cette case voisine est accessible => on l'insere dans le tas binaire
 			list_grey.insert(curr_tile.neighbors[i]->index);
 			path_data.status[curr_tile.neighbors[i]->index] = MAZE_PATH_SEARCHED;
 		}
 		
-		// On a visiter tous ces voisins il devient donc noir
+		// On a visiter tous ses voisins, il devient donc noir
 		list_grey.erase(curr_tile.index);
 		nodes[curr_tile.index].color = BLACK;
 	}
@@ -121,7 +122,7 @@ ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_d
 		return nodes;
 	}
 	
-	// Enregistre le chemin trouvé par remonté depuis le dernier
+	// Enregistre le chemin trouvé par remontée depuis le dernier
 	int curr_index = nodes[end_index].parent_index;
 	
 	while(nodes[curr_index].parent_index != -1){

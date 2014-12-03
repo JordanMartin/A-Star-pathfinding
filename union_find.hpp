@@ -167,6 +167,7 @@ void uf_union(UFNode & node1,UFNode & node2 ) ;
 /* parcourir l'arbre de la classe et renvoyer la racine */
 UFNode & uf_get_root(UFNode & node ) ;
 const UFNode & uf_get_root_const(const UFNode & node ) ;
+UFNode & uf_get_root_with_compression(UFNode & node ) ;
 
 /* vérifier si deux noeuds sont dans la même classe */
 int uf_are_equivalent_without_compression(const UFNode & node1,const UFNode & node2 ) ;

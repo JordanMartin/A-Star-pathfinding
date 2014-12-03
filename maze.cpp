@@ -112,7 +112,7 @@ void maze_break_walls_clever(Maze & maze, int way_count) {
 			}
 			
 			// Si la detruction de ce mur entraine la réunion de deux classe d'équivalences différentes
-			if(!uf_are_equivalent_without_compression(nodes[i], neighbor_node[k])){
+			if(!uf_are_equivalent_with_compression(nodes[i], neighbor_node[k])){
 					
 					// Destruction du mur
 					break_wall(*tile, k);

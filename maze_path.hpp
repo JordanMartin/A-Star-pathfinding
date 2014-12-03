@@ -9,13 +9,13 @@ enum PathStatus {
   MAZE_PATH_START = 0,   /* la case est le point de départ du chemin */
   MAZE_PATH_END = 1,     /* la case est le point d'arrivée du chemin */
   MAZE_PATH_IN = 2,      /* la case fait partie du chemin */
-  MAZE_PATH_OUT = 3,     /* la case de fait pas partie du chemin */
+  MAZE_PATH_OUT = 3,     /* la case ne fait pas partie du chemin */
   MAZE_PATH_UNKNOWN = 4, /* la case n'a pas été visitée */
   MAZE_PATH_SEARCHED = 5 /* la recherche via cette case est en cours */
 } ;
 
 struct PathData {
-  /* satut des case par rapport au chemin */
+  /* statut des cases par rapport au chemin */
   PathStatus* status ;
   /* nombre de cases */
   int data_size ;

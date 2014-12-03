@@ -45,9 +45,9 @@ int main() {
 void display_menu(){
 	
 	system("clear");	
-	cout << "========================================================" << endl; 
-	cout << "            Menu principale : Algorithme A*             " << endl; 
-	cout << "========================================================" << endl << endl; 
+	cout << "============================================================" << endl; 
+	cout << "              Menu principale : Algorithme A*               " << endl; 
+	cout << "============================================================" << endl << endl; 
 	
 	cout << "  1: Créer une nouvelle grille vide" << endl;
 	cout << "  2: Générer une nouvelle grille aléatoirement" << endl;
@@ -58,7 +58,7 @@ void display_menu(){
 	
 	cout << "  9. Quitter" << endl << endl;
 	
-	cout << "--------------------------------------------------------" << endl; 
+	cout << "------------------------------------------------------------" << endl; 
 }
 
 int ask_for_menu_item(){
@@ -81,6 +81,8 @@ void do_action(Maze& maze, int action_id){
 				return;
 			}
 		break;
+		default:
+		break;
 	}
 	
 	
@@ -95,6 +97,9 @@ void do_action(Maze& maze, int action_id){
 	
 		case 9: 
 			if(maze.tiles !=  NULL) maze_grid_clean(maze); 
+		break;
+		
+		default:
 		break;		
 	}
 }
@@ -123,8 +128,18 @@ inline int coord_to_index(const Maze& maze, int x, int y){
 
 
 void new_empty_grid(Maze& maze){
+	int nb_walls;
 	set_grid_size(maze);
 	maze_grid_init(maze, maze.height, maze.width);
+	 /* suppression des murs */
+    for (int i=0; i<maze.tile_size; i++)
+    {
+		for(int j=0; j<4; ++j) 
+		{
+			if (maze.tiles[i].neighbors[j] != NULL)
+			maze.tiles[i].walls[j] = 0;
+		}
+    }
 	display_grid(maze);
 }
 
@@ -133,7 +148,7 @@ void new_random_grid(Maze& maze){
 	maze_grid_init(maze, maze.height, maze.width);
 	
 	int way_count;
-	cout << "Nombre de chemins à générer : ";
+	cout << "Nombre de murs supplementaires à casser : ";
 	cin >> way_count;
 	
 	maze_break_walls_clever(maze, way_count);
@@ -166,9 +181,9 @@ void edit_grid(Maze& maze){
 			cout << " 3. Restaurer le mur haut" << endl;
 		
 		if(maze.tiles[tile_index].walls[1] != 0)	
-			cout << " 4. Casser le mur droite" << endl;
+			cout << " 4. Casser le mur gauche" << endl;
 		else
-			cout << " 4. Restaurer le mur droite" << endl;
+			cout << " 4. Restaurer le mur gauche" << endl;
 		
 		if(maze.tiles[tile_index].walls[2] != 0)
 			cout << " 5. Casser le mur bas" << endl;
@@ -176,11 +191,13 @@ void edit_grid(Maze& maze){
 			cout << " 5. Restaurer le mur bas" << endl;
 		
 		if(maze.tiles[tile_index].walls[3] != 0)
-			cout << " 6. Casser le mur gauche" << endl << endl;
+			cout << " 6. Casser le mur droit" << endl << endl;
 		else
-			cout << " 6. Restaurer le mur gauche" << endl << endl;
+			cout << " 6. Restaurer le mur droit" << endl << endl;
 							
 		cout << " 7. Modifier l'altitude" << endl << endl;
+		
+		cout << " 8. Modifier une autre case" << endl << endl;
 			
 		cout << " 9. Valider" << endl;
 		
@@ -212,6 +229,14 @@ void edit_grid(Maze& maze){
 				cout << "Nouvelle altitude : ";
 				cin >> maze.tiles[tile_index].altitude;
 			break;
+			
+			case 8:
+				ask_coordinate("Coordonées de la nouvelle case à éditer", coord);
+				tile_index = coord_to_index(maze, coord[0], coord[1]);
+			break;
+			
+			default:
+			break;
 	}
 		
 	}while(opt_id != 9);
@@ -234,8 +259,8 @@ void start_astar(Maze& maze){
 	
 	int readed;
 		
-	ask_coordinate("Coordonnées de départs", start_coord);
-	ask_coordinate("Coordonnées d'arrivées", end_coord);
+	ask_coordinate("Coordonnées de départ", start_coord);
+	ask_coordinate("Coordonnées d'arrivée", end_coord);
 
 	start_index = coord_to_index(maze, start_coord[0], start_coord[1]);
 	end_index = coord_to_index(maze, end_coord[0], end_coord[1]);
@@ -258,7 +283,7 @@ void start_astar(Maze& maze){
 }
 
 void press_key_to_continue(){
-	cout << endl << endl << "[Appuyez sur une touche pour conitnuer]";
+	cout << endl << endl << "[Appuyez sur une touche pour continuer]";
 	cin.ignore();
 	getchar();
 }

@@ -1,10 +1,10 @@
 https://www.youtube.com/watch?v=KNXfSOx4eEE
 
 [OK] Ajout altitude 
-[OK configurable via le #define DIFFERENT_POSSIBLE_WAY_COUNT] Plusieus chemin possibles (casser plus de murs)
+[OK configurable via le #define DIFFERENT_POSSIBLE_WAY_COUNT] Plusieurs chemins possible (casser plus de murs)
 [OK] IHM : pourvoir casser / ajouter mur
 [OK] IHM : Définir départ / Arrivé
 
-Compression Union Find
+Compression Union Find OK?
 Set to Tas Binaire
 VERBOSE IF TIME
