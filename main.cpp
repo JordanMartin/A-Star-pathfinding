@@ -36,7 +36,10 @@ int main() {
 		display_menu();	
 		action_id = ask_for_menu_item();
 		do_action(maze, action_id);
-		press_key_to_continue();		
+		
+		if(action_id != 9){
+			press_key_to_continue();		
+		}	
 		
 	}while(action_id != 9);
 	
@@ -153,6 +156,11 @@ void new_full_wall_grid(Maze& maze){
 void new_random_grid(Maze& maze){
 	
 	set_grid_size(maze);
+	
+	bool variable_altitude;
+	cout << "Affecter une altitude aléatoire pour chaque case ? (1: oui, 0; non) : ";
+	cin >> variable_altitude;
+	
 	maze_grid_init(maze, maze.height, maze.width);
 	
 	int supp_wall_count;
@@ -242,9 +250,6 @@ void edit_grid(Maze& maze){
 			case 8:
 				ask_coordinate("Coordonées de la nouvelle case à éditer", coord);
 				tile_index = coord_to_index(maze, coord[0], coord[1]);
-			break;
-			
-			default:
 			break;
 	}
 		

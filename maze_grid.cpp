@@ -4,7 +4,7 @@
 
 #include "maze_grid.hpp"
 
-#define MAX_ALTITUDE 21
+#define MAX_ALTITUDE 10
 
 /* case d'un labyrinthe en forme de grille, de position i,j */
 static Tile* grid_maze_tile(const Maze & maze, int height, int width, int i, int j) {
@@ -18,7 +18,7 @@ static Tile* grid_maze_tile(const Maze & maze, int height, int width, int i, int
 }
 
 /* initialization d'un labyrinthe rectangulaire */
-void maze_grid_init(Maze & maze, int height, int width) {
+void maze_grid_init(Maze & maze, int height, int width, bool variable_altitude) {
 	
   srand(time(NULL));
 
@@ -46,7 +46,7 @@ void maze_grid_init(Maze & maze, int height, int width) {
       tile->index = index ;
       
       // Altitude (aléatoire) de la case
-      tile->altitude = rand() % MAX_ALTITUDE;
+      tile->altitude = variable_altitude ? rand() % MAX_ALTITUDE : 1;
 
       /* allocation des voisinages et des murs */
       tile->neighbors = maze_neighbors + 4*index ;

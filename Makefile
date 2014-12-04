@@ -1,6 +1,6 @@
 CC = g++ 
 # try with 
-CFLAGS = -g -ansi
+CFLAGS = -g -ansi -std=c++11
 EXEC_NAME_TEST = maze
 EXEC_NAME = astar
 
