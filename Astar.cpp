@@ -37,7 +37,6 @@ ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_d
 	
 	// TODO TAS BINAIRE
 	std::set<int> list_grey;
-	//Tile& curr_tile; // = maze.tiles[start_index]
 		
 	int tmp_dist, tmp_curr_dist_min, curr_index_dist_min;
 	

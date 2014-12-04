@@ -19,6 +19,7 @@ void ask_coordinate(string msg, int* coord);
 void press_key_to_continue();
 
 void new_empty_grid(Maze& maze);
+void new_full_wall_grid(Maze& maze);
 void new_random_grid(Maze& maze);
 void edit_grid(Maze& maze);
 void display_grid(Maze& maze);
@@ -49,12 +50,13 @@ void display_menu(){
 	cout << "              Menu principale : Algorithme A*               " << endl; 
 	cout << "============================================================" << endl << endl; 
 	
-	cout << "  1: Créer une nouvelle grille vide" << endl;
-	cout << "  2: Générer une nouvelle grille aléatoirement" << endl;
-	cout << "  3. Modifier la grille (murs et altitudes des cases)" << endl << endl;
-	cout << "  4. Afficher la grille" << endl;
+	cout << "  1: Créer une nouvelle grille sans murs" << endl;
+	cout << "  2: Créer une nouvelle grille avec tous les murs" << endl;
+	cout << "  3: Générer une nouvelle grille aléatoirement" << endl;
+	cout << "  4. Modifier la grille (murs et altitudes des cases)" << endl << endl;
+	cout << "  5. Afficher la grille" << endl;
 	
-	cout << "  5. Lancer l'algorithme Astar entre deux cases" << endl << endl;
+	cout << "  6. Lancer l'algorithme Astar entre deux cases" << endl << endl;
 	
 	cout << "  9. Quitter" << endl << endl;
 	
@@ -73,34 +75,29 @@ int ask_for_menu_item(){
 void do_action(Maze& maze, int action_id){
 	
 	switch(action_id){
-		case 3:
 		case 4:
 		case 5:
+		case 6:
 			if(maze.tiles == NULL){
 				cout << "/!\\ Veuillez créer ou générer une grille avant d'effectuer cette action" << endl;
 				return;
 			}
-		break;
-		default:
-		break;
+		break;	
 	}
-	
 	
 	switch(action_id){
 		
 		case 1: new_empty_grid(maze); break;
-		case 2: new_random_grid(maze); break;
-		case 3: edit_grid(maze); break;		
+		case 2: new_full_wall_grid(maze); break;
+		case 3: new_random_grid(maze); break;
+		case 4: edit_grid(maze); break;		
 		
-		case 4: display_grid(maze); break;	
-		case 5: start_astar(maze); break;
+		case 5: display_grid(maze); break;	
+		case 6: start_astar(maze); break;
 	
 		case 9: 
 			if(maze.tiles !=  NULL) maze_grid_clean(maze); 
-		break;
-		
-		default:
-		break;		
+		break;	
 	}
 }
 
@@ -128,30 +125,41 @@ inline int coord_to_index(const Maze& maze, int x, int y){
 
 
 void new_empty_grid(Maze& maze){
+	
 	int nb_walls;
 	set_grid_size(maze);
 	maze_grid_init(maze, maze.height, maze.width);
-	 /* suppression des murs */
-    for (int i=0; i<maze.tile_size; i++)
+	
+	// suppression des murs
+    for (int i=0; i < maze.tile_size; i++)
     {
-		for(int j=0; j<4; ++j) 
+		for(int j=0; j < 4; ++j) 
 		{
 			if (maze.tiles[i].neighbors[j] != NULL)
 			maze.tiles[i].walls[j] = 0;
 		}
     }
+    
+	display_grid(maze);
+}
+
+void new_full_wall_grid(Maze& maze){
+	
+	set_grid_size(maze);
+	maze_grid_init(maze, maze.height, maze.width);    
 	display_grid(maze);
 }
 
 void new_random_grid(Maze& maze){
+	
 	set_grid_size(maze);
 	maze_grid_init(maze, maze.height, maze.width);
 	
-	int way_count;
+	int supp_wall_count;
 	cout << "Nombre de murs supplementaires à casser : ";
-	cin >> way_count;
+	cin >> supp_wall_count;
 	
-	maze_break_walls_clever(maze, way_count);
+	maze_break_walls_clever(maze, supp_wall_count);
 	display_grid(maze);
 }
 
@@ -172,34 +180,35 @@ void edit_grid(Maze& maze){
 		cout << "    Modification de la case (" << coord[0] << "," << coord[1] << ") - Altitude = " << maze.tiles[tile_index].altitude << endl; 
 		cout << "========================================================" << endl << endl; 
 		
-		cout << " 1. Casser tous les murs de cette case" << endl;
-		cout << " 2. Restaurer tous les murs de cette case" << endl << endl;
+		cout << "  1. Casser tous les murs de cette case" << endl;
+		cout << "  2. Restaurer tous les murs de cette case" << endl << endl;
 		
 		if(maze.tiles[tile_index].walls[0] != 0)
-			cout << " 3. Casser le mur haut" << endl;
+			cout << "  3. Casser le mur haut" << endl;
 		else
-			cout << " 3. Restaurer le mur haut" << endl;
+			cout << "  3. Restaurer le mur haut" << endl;
 		
 		if(maze.tiles[tile_index].walls[1] != 0)	
-			cout << " 4. Casser le mur gauche" << endl;
+			cout << "  4. Casser le mur gauche" << endl;
 		else
-			cout << " 4. Restaurer le mur gauche" << endl;
+			cout << "  4. Restaurer le mur gauche" << endl;
 		
 		if(maze.tiles[tile_index].walls[2] != 0)
-			cout << " 5. Casser le mur bas" << endl;
+			cout << "  5. Casser le mur bas" << endl;
 		else
-			cout << " 5. Restaurer le mur bas" << endl;
+			cout << "  5. Restaurer le mur bas" << endl;
 		
 		if(maze.tiles[tile_index].walls[3] != 0)
-			cout << " 6. Casser le mur droit" << endl << endl;
+			cout << "  6. Casser le mur droit" << endl << endl;
 		else
-			cout << " 6. Restaurer le mur droit" << endl << endl;
+			cout << "  6. Restaurer le mur droit" << endl << endl;
 							
-		cout << " 7. Modifier l'altitude" << endl << endl;
+		cout << "  7. Modifier l'altitude" << endl << endl;
 		
-		cout << " 8. Modifier une autre case" << endl << endl;
-			
-		cout << " 9. Valider" << endl;
+		cout << "  8. Modifier une autre case" << endl;			
+		cout << "  9. Valider" << endl << endl;
+		
+		cout << "------------------------------------------------------------" << endl;
 		
 		display_grid(maze);
 		
