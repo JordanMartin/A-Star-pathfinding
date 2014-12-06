@@ -20,7 +20,7 @@ static void print_path(const void* data,const Tile & tile) {
     "\x1B[44m", /* bleu  pour une portion de chemin */
     "\x1B[49m", /* couleur pour une case en dehors */
     "\x1B[49m", /* couleur pour une case inconnue */
-    "\x1B[49m", /* couleur pour une case recherchée */
+    "\x1B[100m", /* couleur pour une case recherchée */
   } ;
   const char* color_clear = "\x1B[49m" ;
   /* mise en place de la couleur selon le statut */

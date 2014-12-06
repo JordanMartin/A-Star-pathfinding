@@ -12,7 +12,7 @@
  * dans un tel labyrinthe, les cases on en général 4 voisins, 
  */
 
-void maze_grid_init(Maze & maze, int height, int width) ;
+void maze_grid_init(Maze & maze, int height, int width, bool variable_altitude = false) ;
 
 /* Libération de la mémoire relative à un labyrinthe.
  * Attention : la libération du champ data des cases n'est pas faite

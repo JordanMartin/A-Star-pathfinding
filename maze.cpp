@@ -71,7 +71,7 @@ void maze_break_walls_naive(Maze & maze) {
 /* Votre code ici */
 
 /* Destruction intelligente des murs */
-void maze_break_walls_clever(Maze & maze, int way_count) {
+void maze_break_walls_clever(Maze & maze, int supp_wall_count) {
 	
 	srand(time(NULL));
   
@@ -89,7 +89,7 @@ void maze_break_walls_clever(Maze & maze, int way_count) {
 	int alternativeWayCount = 0;
 	
 	// Tant qu'il y a plus d'une classe d'équivalence 
-	while(equiClassCount > 1 || alternativeWayCount < (way_count - 1)) {
+	while(equiClassCount > 1 || alternativeWayCount < (supp_wall_count - 1)) {
 		
 		// Selectionne une case de manière aléatoire
 		i = rand() % maze.tile_size;
