@@ -4,7 +4,7 @@
 #include "maze.hpp"
 #include "maze_grid.hpp"
 #include "maze_path.hpp"
-#include "Astar.hpp"
+#include "astar.hpp"
 
 int main() {
 

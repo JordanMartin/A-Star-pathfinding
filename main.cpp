@@ -6,7 +6,7 @@
 #include "maze.hpp"
 #include "maze_grid.hpp"
 #include "maze_path.hpp"
-#include "Astar.hpp"
+#include "astar.hpp"
 
 using namespace std;
 
@@ -16,6 +16,7 @@ int ask_for_menu_item();
 void do_action(Maze& maze, int action_id);
 void set_grid_size(Maze& maze);
 void ask_coordinate(string msg, int* coord);
+void ask_number(string msg, int& n);
 void press_key_to_continue();
 
 void new_empty_grid(Maze& maze);
@@ -29,6 +30,46 @@ int main() {
 
 	Maze maze;
 	maze.tiles = NULL;
+	
+	/*
+	maze.height = 15;
+	maze.width = 60;
+	//TODO TMP REMOVE
+	maze_grid_init(maze, maze.height, maze.width, true	);
+	// suppression des murs
+    for (int i=0; i < maze.tile_size; i++)
+    {
+		for(int j=0; j < 4; ++j) 
+		{
+			if (maze.tiles[i].neighbors[j] != NULL)
+			maze.tiles[i].walls[j] = 0;
+		}
+    }
+    
+    // Trace un U en obstacle
+    restore_wall(maze.tiles[5*60+30], 0);restore_wall(maze.tiles[5*60+30], 1);restore_wall(maze.tiles[5*60+30], 2);restore_wall(maze.tiles[5*60+30], 3);
+    restore_wall(maze.tiles[6*60+30], 0);restore_wall(maze.tiles[6*60+30], 1);restore_wall(maze.tiles[6*60+30], 2);restore_wall(maze.tiles[6*60+30], 3);
+    restore_wall(maze.tiles[7*60+30], 0);restore_wall(maze.tiles[7*60+30], 1);restore_wall(maze.tiles[7*60+30], 2);restore_wall(maze.tiles[7*60+30], 3);
+    restore_wall(maze.tiles[8*60+30], 0);restore_wall(maze.tiles[8*60+30], 1);restore_wall(maze.tiles[8*60+30], 2);restore_wall(maze.tiles[8*60+30], 3);
+    restore_wall(maze.tiles[9*60+30], 0);restore_wall(maze.tiles[9*60+30], 1);restore_wall(maze.tiles[9*60+30], 2);restore_wall(maze.tiles[9*60+30], 3);
+    
+    restore_wall(maze.tiles[5*60+29], 0);restore_wall(maze.tiles[5*60+29], 1);restore_wall(maze.tiles[5*60+29], 2);restore_wall(maze.tiles[5*60+29], 3);
+    restore_wall(maze.tiles[5*60+28], 0);restore_wall(maze.tiles[5*60+28], 1);restore_wall(maze.tiles[5*60+28], 2);restore_wall(maze.tiles[5*60+28], 3);
+    restore_wall(maze.tiles[5*60+27], 0);restore_wall(maze.tiles[5*60+27], 1);restore_wall(maze.tiles[5*60+27], 2);restore_wall(maze.tiles[5*60+27], 3);
+    restore_wall(maze.tiles[5*60+26], 0);restore_wall(maze.tiles[5*60+26], 1);restore_wall(maze.tiles[5*60+26], 2);restore_wall(maze.tiles[5*60+26], 3);
+    
+    restore_wall(maze.tiles[9*60+29], 0);restore_wall(maze.tiles[9*60+29], 1);restore_wall(maze.tiles[9*60+29], 2);restore_wall(maze.tiles[9*60+29], 3);
+    restore_wall(maze.tiles[9*60+28], 0);restore_wall(maze.tiles[9*60+28], 1);restore_wall(maze.tiles[9*60+28], 2);restore_wall(maze.tiles[9*60+28], 3);
+    restore_wall(maze.tiles[9*60+27], 0);restore_wall(maze.tiles[9*60+27], 1);restore_wall(maze.tiles[9*60+27], 2);restore_wall(maze.tiles[9*60+27], 3);
+    restore_wall(maze.tiles[9*60+26], 0);restore_wall(maze.tiles[9*60+26], 1);restore_wall(maze.tiles[9*60+26], 2);restore_wall(maze.tiles[9*60+26], 3);	
+    
+    
+    
+	//~ int supp_wall_count= 1500;
+	//~ maze_break_walls_clever(maze, supp_wall_count);
+	//~ 
+	//TODO
+	*/
 	
 	int action_id;
 	
@@ -69,9 +110,8 @@ void display_menu(){
 int ask_for_menu_item(){
 	
 	int choice;
-	cout << "Votre choix : ";
-	cin >> choice;
-	
+	ask_number("Votre choix", choice);
+		
 	return choice; 
 }
 
@@ -106,11 +146,8 @@ void do_action(Maze& maze, int action_id){
 
 void set_grid_size(Maze& maze){
 	
-	cout << "Largeur de la grille : ";
-	cin >> maze.width;
-	
-	cout << "Hauteur de la grille : ";
-	cin >> maze.height;
+	ask_number("Largeur de la grille", maze.width);
+	ask_number("Hauteur de la grille", maze.height);
 }
 
 void ask_coordinate(string msg, int* coord){
@@ -120,6 +157,21 @@ void ask_coordinate(string msg, int* coord){
 		cin.ignore();
 		readed = scanf("%d,%d", &coord[0], &coord[1]);		
 	}while(readed != 2);
+}
+
+void ask_number(string msg, int& n){
+	
+	while(1){
+		cout << msg << " : ";
+		cin >> n;
+
+		if(!cin.fail())		
+			return;
+		
+		cin.clear();
+		cin.ignore(INT_MAX, '\n');
+		cout << "Nombre invalide...\n";
+	}
 }
 
 inline int coord_to_index(const Maze& maze, int x, int y){
@@ -157,15 +209,13 @@ void new_random_grid(Maze& maze){
 	
 	set_grid_size(maze);
 	
-	bool variable_altitude;
-	cout << "Affecter une altitude aléatoire pour chaque case ? (1: oui, 0; non) : ";
-	cin >> variable_altitude;
+	int variable_altitude;
+	ask_number("Affecter une altitude aléatoire pour chaque case ? (1: oui, 0; non)", variable_altitude);
 	
-	maze_grid_init(maze, maze.height, maze.width);
+	maze_grid_init(maze, maze.height, maze.width, (bool)variable_altitude);
 	
 	int supp_wall_count;
-	cout << "Nombre de murs supplementaires à casser : ";
-	cin >> supp_wall_count;
+	ask_number("Nombre de murs supplementaires à casser", supp_wall_count);
 	
 	maze_break_walls_clever(maze, supp_wall_count);
 	display_grid(maze);
@@ -243,8 +293,7 @@ void edit_grid(Maze& maze){
 			case 6: swap_wall(maze.tiles[tile_index], 3); break;
 			
 			case 7: 
-				cout << "Nouvelle altitude : ";
-				cin >> maze.tiles[tile_index].altitude;
+				ask_number("Nouvelle altitude", maze.tiles[tile_index].altitude);
 			break;
 			
 			case 8:
@@ -298,6 +347,6 @@ void start_astar(Maze& maze){
 
 void press_key_to_continue(){
 	cout << endl << endl << "[Appuyez sur une touche pour continuer]";
-	cin.ignore();
+	cin.ignore(INT_MAX, '\n');
 	getchar();
 }

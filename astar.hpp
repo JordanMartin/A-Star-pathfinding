@@ -3,10 +3,12 @@
 
 #include <cstdlib>
 #include <cmath>
-#include "maze.hpp"
 #include <set>
 #include <climits>
 #include <iostream>
+#include <queue>
+
+#include "maze.hpp"
 #include "maze_path.hpp"
 
 enum ASColor { BLACK, GREY, WHITE };
@@ -14,7 +16,8 @@ enum ASColor { BLACK, GREY, WHITE };
 struct ASNODE {
 	
 	int parent_index; // -1 = pas de parent
-	int dist; // Meilleure distance depuis le noeud de départ  (-1 = infini)
+	int g_cost; // Meilleure distance depuis le noeud de départ  (-1 = infini)
+	float h_cost; // Heuristique distance
 	ASColor color;
 };
 
