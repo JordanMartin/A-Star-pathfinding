@@ -395,12 +395,13 @@ void start_astar(Maze& maze){
 	end_index = coord_to_index(maze, end_coord[0], end_coord[1]);
 	*/
 	
-	ASNODE* nodes = astar(maze, start_index, end_index, path_data);
+	float search_time;
+	ASNODE* nodes = astar(maze, start_index, end_index, path_data, search_time);
 	
 	cout << endl;
 	
 	if(nodes[end_index].parent_index != -1){
-		cout << "Chemin trouvé !" << endl;
+		printf("Chemin trouvé en %.2fms\n", search_time);	
 	}else{
 		cout << "Chemin non trouvé !" << endl;
 	}

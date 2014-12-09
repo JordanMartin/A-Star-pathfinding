@@ -23,7 +23,7 @@ struct ASNODE {
 	ASColor color;
 };
 
-ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_data);
+ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_data, float& search_time);
 
 
 #endif
