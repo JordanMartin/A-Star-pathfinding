@@ -11,7 +11,8 @@ enum PathStatus {
   MAZE_PATH_IN = 2,      /* la case fait partie du chemin */
   MAZE_PATH_OUT = 3,     /* la case ne fait pas partie du chemin */
   MAZE_PATH_UNKNOWN = 4, /* la case n'a pas été visitée */
-  MAZE_PATH_SEARCHED = 5 /* la recherche via cette case est en cours */
+  MAZE_PATH_SEARCHED = 5, /* la recherche via cette case est en cours */
+  MAZE_PATH_EXPLORED = 6
 } ;
 
 struct PathData {

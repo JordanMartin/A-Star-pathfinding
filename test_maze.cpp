@@ -14,15 +14,13 @@ int main() {
 
   /* initialisation d'un labyrinthe rectangulaire */
   maze_grid_init(maze, maze.height, maze.width) ;
-  maze_grid_print(maze, maze.height, maze.width) ;
 
   /* suppression de murs */
   maze_break_walls_clever(maze, 2) ;
-  maze_grid_print(maze, maze.height, maze.width) ;
   
   PathData path_data_clever_astar ;
   
-  int start_index = 0, end_index = maze.tile_size/1.1;
+  int start_index = 0, end_index = maze.tile_size-1;
   
   ASNODE* nodes = astar(maze, start_index, end_index, path_data_clever_astar);
   delete[] nodes;

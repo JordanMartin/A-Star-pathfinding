@@ -17,9 +17,9 @@ enum ASColor { BLACK, GREY, WHITE };
 //TODO FIX NAME
 struct ASNODE {
 	
-	int parent_index; // -1 = pas de parent
+	int parent_index; // -1 = Pas de parent
 	int g_cost; // Meilleure distance depuis le noeud de départ  (-1 = infini)
-	float h_cost; // Heuristique distance
+	float h_cost; // Distance heuristique
 	ASColor color;
 };
 

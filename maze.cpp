@@ -78,7 +78,7 @@ void maze_break_walls_clever(Maze & maze, int supp_wall_count) {
 	int i, j, index;
 	UFNode* neighbor_node = new UFNode[4];
 	
-	// Initialise les arbres de chaque cases
+	// Initialise les arbres de chaque case
 	UFNode* nodes = new UFNode[maze.tile_size];
 	for(i = 0; i < maze.tile_size; ++i) {
 		uf_node_init(nodes[i]);
@@ -94,7 +94,7 @@ void maze_break_walls_clever(Maze & maze, int supp_wall_count) {
 		// Selectionne une case de manière aléatoire
 		i = rand() % maze.tile_size;
 		
-		// pointeur sur une case 
+		// Pointeur sur une case 
 		Tile* tile = maze.tiles + i;
 		
 		for(j = 0; j < 4; j++){
@@ -103,7 +103,7 @@ void maze_break_walls_clever(Maze & maze, int supp_wall_count) {
 			}
 		}	
 
-		// On test tous les mur de la case
+		// On teste tous les murs de la case
 		for(int k = 0; k < 4; k++){
 			
 			// Si le mur est une bordure de la grille on passe
@@ -111,16 +111,16 @@ void maze_break_walls_clever(Maze & maze, int supp_wall_count) {
 				continue;
 			}
 			
-			// Si la detruction de ce mur entraine la réunion de deux classe d'équivalences différentes
+			// Si la detruction de ce mur entraine la réunion de deux classes d'équivalence différentes
 			if(!uf_are_equivalent_with_compression(nodes[i], neighbor_node[k])){
 					
 					// Destruction du mur
 					break_wall(*tile, k);
-					// Les deux classes ne forme maintenant plus qu'une
+					// Les deux classes ne forment maintenant plus qu'une
 					uf_union(nodes[i], neighbor_node[k]);
 					equiClassCount--;
 			}
-			// Casse des murs supplémentaire pour créer plusieurs chemins
+			// Casse des murs supplémentaires pour créer plusieurs chemins
 			else if(equiClassCount == 1){
 				break_wall(*tile, k);
 				alternativeWayCount++;

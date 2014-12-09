@@ -14,13 +14,14 @@ static void print_path(const void* data,const Tile & tile) {
   /* Récupération du statut du chemin */
   PathData* path_data = (PathData*) data ;
   /* Couleurs des différents statuts */
-  const char* status_color[6] = {
+  const char* status_color[7] = {
     "\x1B[42m", /* vert pour le départ */
     "\x1B[41m", /* rouge pour l'arrivée */
     "\x1B[44m", /* bleu  pour une portion de chemin */
     "\x1B[49m", /* couleur pour une case en dehors */
     "\x1B[49m", /* couleur pour une case inconnue */
-    "\x1B[100m", /* couleur pour une case recherchée */
+    "\x1B[100m", /* couleur (gris) pour une case recherchée */
+    "\x1B[43m", /* couleur (violet) pour une case explorée */
   } ;
   const char* color_clear = "\x1B[49m" ;
   /* mise en place de la couleur selon le statut */
@@ -32,8 +33,8 @@ static void print_path(const void* data,const Tile & tile) {
 }
 
 /* Affichage d'un chemin */
-void maze_grid_print_path(const Maze & maze, int height, int width, const PathData & data ) {
-  maze_grid_print_generic(maze, height, width, 1, 2, &data, print_path) ;
+void maze_grid_print_path(const Maze & maze, int height, int width, const PathData &data) {
+  maze_grid_print_generic(maze, height, width, 1, 2, &data, print_path);
 }
 
 /* Recherche de chemin */

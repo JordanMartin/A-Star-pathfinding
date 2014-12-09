@@ -1,6 +1,8 @@
 #include "astar.hpp"
 
-inline float heurestic(const Maze& maze, const Tile& t1, const Tile& t2){
+
+//Calcule la distance euclidienne 
+inline float heuristic(const Maze& maze, const Tile& t1, const Tile& t2){
 	
 	int x_start = t1.index % maze.width;
 	int y_start = t1.index / maze.width;
@@ -25,6 +27,8 @@ ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_d
 	path_data.status = new PathStatus[maze.tile_size];
 	path_data.data_size = maze.tile_size ;
 	
+	
+	//On initialise le tableau de noeud et path_data
 	for(int i = 0; i < maze.tile_size; i++){
 		path_data.status[i] = MAZE_PATH_UNKNOWN;
 	}
@@ -39,7 +43,7 @@ ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_d
 		nodes[i].color = WHITE;
 		nodes[i].parent_index = -1;
 		nodes[i].g_cost = 0;
-		nodes[i].h_cost = heurestic(maze, maze.tiles[i], maze.tiles[end_index]);
+		nodes[i].h_cost = heuristic(maze, maze.tiles[i], maze.tiles[end_index]);
 	}
 	
 	// File de prio (par tas binaire)
@@ -53,7 +57,7 @@ ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_d
 	bool way_founded = false;
 	int curr_g_cost;
 	
-	// g(x) distance estimé depuis la case x à la case d'arrivé
+	// g(x) distance estimée (heuristique) depuis la case x à la case d'arrivée
 	// h(x) distance de la case de départ à la case x
 	// f(x) = h(x) + g(x)
 	
@@ -70,8 +74,10 @@ ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_d
 	
 		list_grey.pop();
 		curr_node.color = BLACK;
+		path_data.status[curr_tile.index] = MAZE_PATH_EXPLORED;
+		
 			
-		// Parcours les voisins de la case
+		// Parcours des voisins de la case
 		for(int i = 0; i < curr_tile.neighbor_size; i++){
 			
 			// Case hors grille ou derrière un mur
@@ -86,17 +92,18 @@ ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_d
 			if(curr_neighbor_node.color == BLACK){
 				continue;
 			}
-								
+			
+			//La distance depuis le départ du noeud courant					
 			curr_g_cost = curr_node.g_cost 
 				+ sqrt(1 + pow(curr_neighbor_tile.altitude - curr_tile.altitude, 2));	
 			
-			// Cette case voisine n'a pas encore été visitée ou offre un cout inférieur 
+			// Cette case voisine n'a pas encore été visitée ou offre un coût inférieur 
 			if(curr_neighbor_node.color != GREY || 
 				curr_g_cost < curr_neighbor_node.g_cost){
 			
-				// On met a jour les distances g et h
+				// On met a jour la distance g
 				curr_neighbor_node.g_cost = curr_g_cost;
-				//~ curr_neighbor_node.h_cost = heurestic(maze, curr_neighbor_tile, maze.tiles[end_index]);
+
 							
 				if(curr_neighbor_node.color != GREY){
 					list_grey.push(std::make_pair(
@@ -108,6 +115,8 @@ ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_d
 				curr_neighbor_node.parent_index = curr_tile.index;
 				curr_neighbor_node.color = GREY;
 				path_data.status[curr_neighbor_tile.index] = MAZE_PATH_SEARCHED;
+				
+				maze_grid_print_path(maze, maze.height, maze.width, path_data);
 			}
 		}
 	}

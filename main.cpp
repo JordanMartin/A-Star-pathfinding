@@ -31,7 +31,7 @@ void start_astar(Maze& maze);
  * Selectionne uen case avec les flèches 
  * 
  * @param start_index Si supérieur à -1 affiche en vert cette case 
- * @param end_index Si supérieur à -1 affiche en bleu cette case 
+ * @param end_index   Si supérieur à -1 affiche en bleu cette case 
  * 
  **/
 int interactive_select_tile(Maze& maze, string msg, int start_index, int end_index = -1);
@@ -39,13 +39,15 @@ int interactive_select_tile(Maze& maze, string msg, int start_index, int end_ind
 enum KeyPress {UP, DOWN, LEFT, RIGHT, ENTER, UNDEFINED};
 /**
  * Detecte l'appuie sur les touches du clavier
- * Si aucun paramètre n'est pas passé, la fonction retourne la flèche appuyée ou la touche entrée
+ * Si aucun paramètre n'est passé, la fonction retourne la flèche appuyée ou la touche entrée
  * 
- * @param immediat_return Si true, la fonction retourne dès qu'une flêche ou la touche entrée est appuyée. 
- *  		Si false, elle retourne seulement lorsque la touche entrée est appuyée
+ * @param immediat_return 
+ * 			Si true, la fonction s'arrête dès qu'une flêche ou la touche entrée est appuyée. 
+ *  		Si false, elle s'arrête seulement lorsque la touche entrée est appuyée
  * 
  * @param {on_up, on_right, on_down, on_left} Callback appelé lorsque la touche correspondante est appuyée
  **/
+ 
 KeyPress listen_direction_key(void* args = NULL, 
 							bool immediat_return = true,
 							void on_up(void* args) = NULL, 
@@ -61,46 +63,6 @@ int main() {
 
 	Maze maze;
 	maze.tiles = NULL;
-	
-	/*
-	maze.height = 15;
-	maze.width = 60;
-	//TODO TMP REMOVE
-	maze_grid_init(maze, maze.height, maze.width, true	);
-	// suppression des murs
-    for (int i=0; i < maze.tile_size; i++)
-    {
-		for(int j=0; j < 4; ++j) 
-		{
-			if (maze.tiles[i].neighbors[j] != NULL)
-			maze.tiles[i].walls[j] = 0;
-		}
-    }
-    
-    // Trace un U en obstacle
-    restore_wall(maze.tiles[5*60+30], 0);restore_wall(maze.tiles[5*60+30], 1);restore_wall(maze.tiles[5*60+30], 2);restore_wall(maze.tiles[5*60+30], 3);
-    restore_wall(maze.tiles[6*60+30], 0);restore_wall(maze.tiles[6*60+30], 1);restore_wall(maze.tiles[6*60+30], 2);restore_wall(maze.tiles[6*60+30], 3);
-    restore_wall(maze.tiles[7*60+30], 0);restore_wall(maze.tiles[7*60+30], 1);restore_wall(maze.tiles[7*60+30], 2);restore_wall(maze.tiles[7*60+30], 3);
-    restore_wall(maze.tiles[8*60+30], 0);restore_wall(maze.tiles[8*60+30], 1);restore_wall(maze.tiles[8*60+30], 2);restore_wall(maze.tiles[8*60+30], 3);
-    restore_wall(maze.tiles[9*60+30], 0);restore_wall(maze.tiles[9*60+30], 1);restore_wall(maze.tiles[9*60+30], 2);restore_wall(maze.tiles[9*60+30], 3);
-    
-    restore_wall(maze.tiles[5*60+29], 0);restore_wall(maze.tiles[5*60+29], 1);restore_wall(maze.tiles[5*60+29], 2);restore_wall(maze.tiles[5*60+29], 3);
-    restore_wall(maze.tiles[5*60+28], 0);restore_wall(maze.tiles[5*60+28], 1);restore_wall(maze.tiles[5*60+28], 2);restore_wall(maze.tiles[5*60+28], 3);
-    restore_wall(maze.tiles[5*60+27], 0);restore_wall(maze.tiles[5*60+27], 1);restore_wall(maze.tiles[5*60+27], 2);restore_wall(maze.tiles[5*60+27], 3);
-    restore_wall(maze.tiles[5*60+26], 0);restore_wall(maze.tiles[5*60+26], 1);restore_wall(maze.tiles[5*60+26], 2);restore_wall(maze.tiles[5*60+26], 3);
-    
-    restore_wall(maze.tiles[9*60+29], 0);restore_wall(maze.tiles[9*60+29], 1);restore_wall(maze.tiles[9*60+29], 2);restore_wall(maze.tiles[9*60+29], 3);
-    restore_wall(maze.tiles[9*60+28], 0);restore_wall(maze.tiles[9*60+28], 1);restore_wall(maze.tiles[9*60+28], 2);restore_wall(maze.tiles[9*60+28], 3);
-    restore_wall(maze.tiles[9*60+27], 0);restore_wall(maze.tiles[9*60+27], 1);restore_wall(maze.tiles[9*60+27], 2);restore_wall(maze.tiles[9*60+27], 3);
-    restore_wall(maze.tiles[9*60+26], 0);restore_wall(maze.tiles[9*60+26], 1);restore_wall(maze.tiles[9*60+26], 2);restore_wall(maze.tiles[9*60+26], 3);	
-    
-    
-    
-	//~ int supp_wall_count= 1500;
-	//~ maze_break_walls_clever(maze, supp_wall_count);
-	//~ 
-	//TODO
-	*/
 	
 	int action_id;
 	
@@ -255,13 +217,9 @@ void new_random_grid(Maze& maze){
 void edit_grid(Maze& maze){
 
 	int coord[2];
-	
+		
 	display_grid(maze);
-	
-	/*
-	ask_coordinate("Coordonées de la case à éditer", coord);
-	int tile_index = coord_to_index(maze, coord[0], coord[1]);
-	*/
+
 	int tile_index = interactive_select_tile(maze, "Selectionnez la case à editer", -1);
 	coord[0] = tile_index % maze.width;
 	coord[1] = tile_index / maze.width;
@@ -334,11 +292,7 @@ void edit_grid(Maze& maze){
 			break;
 			
 			case 8:
-			/*
-				ask_coordinate("Coordonées de la nouvelle case à éditer", coord);
-				tile_index = coord_to_index(maze, coord[0], coord[1]);
-				* */
-				tile_index = interactive_select_tile(maze, "Selectionnez la case à editer", -1);
+				tile_index = interactive_select_tile(maze, "Selectionner la case à editer", -1);
 				coord[0] = tile_index % maze.width;
 				coord[1] = tile_index / maze.width;
 			break;
@@ -383,17 +337,11 @@ void start_astar(Maze& maze){
 	int start_coord[2], end_coord[2];
 	int readed;
 		
-	start_index = interactive_select_tile(maze, "Selectionnez la case de départ", -1, -1);
+	start_index = interactive_select_tile(maze, "Selectionner la case de départ", -1, -1);
 	cout << start_index << endl;
-	end_index = interactive_select_tile(maze, "Selectionnez la case de d'arriver", start_index, -1);
+	end_index = interactive_select_tile(maze, "Selectionner la case d'arrivée", start_index, -1);
 	cout << end_index << endl;	
 	
-	/* OLD INTPUT MODE	
-	ask_coordinate("Coordonnées de départ", start_coord);
-	ask_coordinate("Coordonnées d'arrivée", end_coord);
-	start_index = coord_to_index(maze, start_coord[0], start_coord[1]);
-	end_index = coord_to_index(maze, end_coord[0], end_coord[1]);
-	*/
 	
 	float search_time;
 	ASNODE* nodes = astar(maze, start_index, end_index, path_data, search_time);
@@ -414,7 +362,7 @@ void start_astar(Maze& maze){
 }
 
 void press_key_to_continue(){
-	cout << endl << endl << "[Appuyez sur une touche pour continuer]";
+	cout << endl << endl << "[Appuyer sur une touche pour continuer]";
 	cin.ignore(INT_MAX, '\n');
 	getchar();
 }
@@ -491,7 +439,7 @@ int interactive_select_tile(Maze& maze, string msg, int start_index, int end_ind
 		if(start_index == -1) display_grid(maze, init_index);
 		else display_grid(maze, start_index, init_index);
 		
-		cout << msg << " (Utilisez les flêches, 2x Entrée pour valider)\n";
+		cout << msg << " (Utiliser les flèches, 2x Entrée pour valider)\n";
 		key = listen_direction_key();
 		
 		switch(key){

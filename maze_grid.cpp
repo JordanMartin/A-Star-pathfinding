@@ -147,10 +147,10 @@ void maze_grid_print_generic(const Maze & maze,
       corner_type *= 2 ;
       if((br && br->walls[0]) || (tr && tr->walls[2])) ++corner_type ;
 
-      /* affichage du coin */
+      /* Affichage du coin */
       printf(wall_chars[corner_type]) ;
 
-      /* mur du haut */
+      /* Mur du haut */
       if(i < width) {
         if((tr && tr->walls[2]) || (br && br->walls[0])) {
           for(k = 0; k < tile_width; ++k) {
@@ -170,7 +170,7 @@ void maze_grid_print_generic(const Maze & maze,
 	if(j < height) printf("%3d ", j);
 		
     if(j < height) {
-      /* affichage des murs droite gauche */
+      /* Affichage des murs droite/gauche */
       for(k = 0; k < tile_height; ++k) {
         Tile *prev = NULL, *current = NULL ;
         for(i = 0; i <= width; ++i) {
@@ -183,7 +183,7 @@ void maze_grid_print_generic(const Maze & maze,
           }
           if(i < width) {
             for(l = 0; l < tile_width; ++l) {
-              /* affichage de l'intérieur de la case en utilisant print_data */
+              /* Affichage de l'intérieur de la case en utilisant print_data */
               print_data(data, *current) ;
             }
           }
@@ -196,7 +196,7 @@ void maze_grid_print_generic(const Maze & maze,
   }
   printf("\n");
    printf("    ");
-  // Affichage des numéros de colonnes
+  // Affichage des numéros de colonne
   for(i = 0; i < width; ++i) {
     if(i/10 != 0)
 	  printf("  %d", i/10);
@@ -205,7 +205,7 @@ void maze_grid_print_generic(const Maze & maze,
   }
   printf("\n");
   printf("    ");
-  // Affichage des numéros de colonnes
+  // Affichage des numéros de colonne
   for(i = 0; i < width; ++i) {
 	  printf("  %d", i%10);
   }
