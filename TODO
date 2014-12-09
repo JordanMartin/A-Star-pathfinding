@@ -5,7 +5,11 @@ https://www.youtube.com/watch?v=KNXfSOx4eEE
 [OK] IHM : pourvoir casser / ajouter mur
 [OK] IHM : Définir départ / Arrivé
 [OK] Lors de la generation aléatoire demander si faut générer un altitude aléatoire à chaque case 
+[OK] Tas binaire
+
 
 Compression Union Find OK?
-Set to Tas Binaire
+
 VERBOSE IF TIME
+Affichage du temps d'execution
+

@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <iostream>
 #include <string>
+#include <climits>
 
 #include "maze.hpp"
 #include "maze_grid.hpp"
@@ -23,8 +24,38 @@ void new_empty_grid(Maze& maze);
 void new_full_wall_grid(Maze& maze);
 void new_random_grid(Maze& maze);
 void edit_grid(Maze& maze);
-void display_grid(Maze& maze);
+void display_grid(const Maze& maze, int highlight_start_index = -1, int highlight_end_index = -1);
 void start_astar(Maze& maze);
+
+/**
+ * Selectionne uen case avec les flèches 
+ * 
+ * @param start_index Si supérieur à -1 affiche en vert cette case 
+ * @param end_index Si supérieur à -1 affiche en bleu cette case 
+ * 
+ **/
+int interactive_select_tile(Maze& maze, string msg, int start_index, int end_index = -1);
+
+enum KeyPress {UP, DOWN, LEFT, RIGHT, ENTER, UNDEFINED};
+/**
+ * Detecte l'appuie sur les touches du clavier
+ * Si aucun paramètre n'est pas passé, la fonction retourne la flèche appuyée ou la touche entrée
+ * 
+ * @param immediat_return Si true, la fonction retourne dès qu'une flêche ou la touche entrée est appuyée. 
+ *  		Si false, elle retourne seulement lorsque la touche entrée est appuyée
+ * 
+ * @param {on_up, on_right, on_down, on_left} Callback appelé lorsque la touche correspondante est appuyée
+ **/
+KeyPress listen_direction_key(void* args = NULL, 
+							bool immediat_return = true,
+							void on_up(void* args) = NULL, 
+							void on_right(void* args) = NULL,
+							void on_down(void* args) = NULL,
+							void on_left(void* args) = NULL);
+
+static inline int mod(int a, int b){
+	return a >= 0 ? a % b : b - (-a % b);
+}
 
 int main() {
 
@@ -227,8 +258,14 @@ void edit_grid(Maze& maze){
 	
 	display_grid(maze);
 	
+	/*
 	ask_coordinate("Coordonées de la case à éditer", coord);
 	int tile_index = coord_to_index(maze, coord[0], coord[1]);
+	*/
+	int tile_index = interactive_select_tile(maze, "Selectionnez la case à editer", -1);
+	coord[0] = tile_index % maze.width;
+	coord[1] = tile_index / maze.width;
+	
 	
 	int opt_id;
 	
@@ -268,7 +305,7 @@ void edit_grid(Maze& maze){
 		
 		cout << "------------------------------------------------------------" << endl;
 		
-		display_grid(maze);
+		display_grid(maze, tile_index);
 		
 		opt_id = ask_for_menu_item();
 		
@@ -297,36 +334,66 @@ void edit_grid(Maze& maze){
 			break;
 			
 			case 8:
+			/*
 				ask_coordinate("Coordonées de la nouvelle case à éditer", coord);
 				tile_index = coord_to_index(maze, coord[0], coord[1]);
+				* */
+				tile_index = interactive_select_tile(maze, "Selectionnez la case à editer", -1);
+				coord[0] = tile_index % maze.width;
+				coord[1] = tile_index / maze.width;
 			break;
 	}
 		
 	}while(opt_id != 9);
 }
 
-void display_grid(Maze& maze){
+void display_grid(const Maze& maze, int highlight_start_index, int highlight_end_index){
+	
 	cout << endl;
-	maze_grid_print(maze, maze.height, maze.width);
-	cout << endl;
+		
+	if(highlight_start_index != -1 || highlight_end_index != -1){			
+		PathData path_data;
+		path_data.status = new PathStatus[maze.tile_size];
+		path_data.data_size = maze.tile_size;
+		
+		for(int i = 0; i < maze.tile_size; i++){
+			path_data.status[i] = MAZE_PATH_UNKNOWN;
+		}
+		
+		if(highlight_start_index != -1){
+			path_data.status[highlight_start_index] = MAZE_PATH_START;
+		}
+		
+		if(highlight_end_index != -1){
+			path_data.status[highlight_end_index] = MAZE_PATH_END;
+		}
+		
+		maze_grid_print_path(maze, maze.height, maze.width, path_data);
+		maze_path_clean(path_data);
+	}else{
+		maze_grid_print(maze, maze.height, maze.width);
+	}
 }
 
 void start_astar(Maze& maze){
 	
 	PathData path_data;
-
-	display_grid(maze);
 	
-	int start_index, end_index;
+	int start_index = 0, end_index = 0;
 	int start_coord[2], end_coord[2];
-	
 	int readed;
 		
+	start_index = interactive_select_tile(maze, "Selectionnez la case de départ", -1, -1);
+	cout << start_index << endl;
+	end_index = interactive_select_tile(maze, "Selectionnez la case de d'arriver", start_index, -1);
+	cout << end_index << endl;	
+	
+	/* OLD INTPUT MODE	
 	ask_coordinate("Coordonnées de départ", start_coord);
 	ask_coordinate("Coordonnées d'arrivée", end_coord);
-
 	start_index = coord_to_index(maze, start_coord[0], start_coord[1]);
 	end_index = coord_to_index(maze, end_coord[0], end_coord[1]);
+	*/
 	
 	ASNODE* nodes = astar(maze, start_index, end_index, path_data);
 	
@@ -349,4 +416,104 @@ void press_key_to_continue(){
 	cout << endl << endl << "[Appuyez sur une touche pour continuer]";
 	cin.ignore(INT_MAX, '\n');
 	getchar();
+}
+
+KeyPress listen_direction_key(void* args, 
+							bool immediat_return,
+							void on_up(void* args), 
+							void on_right(void* args),
+							void on_down(void* args),
+							void on_left(void* args)){
+	
+	system("stty -icanon");
+	system("stty -echo");
+
+	cin.ignore();
+	char c;
+	char hist[5];
+	int hist_pos = 0;
+	int choice;
+	
+	KeyPress last_pressed = UNDEFINED;
+		
+	do{ 
+		c = getchar();
+		hist[hist_pos] = c;
+		
+		if(c == 10){
+			last_pressed = ENTER;
+		}
+		
+		if(hist[mod(hist_pos-1, 4)] == 91){
+			
+			switch(hist[hist_pos]){
+				case 65:
+					if(on_up != NULL) on_up(args);
+					last_pressed = UP;
+				break;
+				
+				case 66:
+					if(on_down != NULL) on_down(args);
+					last_pressed = DOWN;
+				break;
+				
+				case 67: 
+					if(on_right != NULL) on_right(args);
+					last_pressed = last_pressed = RIGHT;
+				break;
+				
+				case 68: 
+					if(on_left != NULL) on_left(args);
+					last_pressed = last_pressed = LEFT;
+				break;
+			}
+		}
+			
+		++hist_pos %= 4;
+		
+	}while(last_pressed == UNDEFINED || (!immediat_return && last_pressed != ENTER));
+	
+	system("stty icanon");
+	system("stty echo");
+	
+	return last_pressed;						  
+}
+
+int interactive_select_tile(Maze& maze, string msg, int start_index, int end_index){
+	
+	int init_index = 0;
+	
+	KeyPress key;
+	
+	do{
+		system("clear");
+		if(start_index == -1) display_grid(maze, init_index);
+		else display_grid(maze, start_index, init_index);
+		
+		cout << msg << " (Utilisez les flêches, 2x Entrée pour valider)\n";
+		key = listen_direction_key();
+		
+		switch(key){
+			case UP:
+				init_index -= maze.width;
+			break;
+			
+			case DOWN:
+				init_index += maze.width;
+			break;
+			
+			case LEFT:
+				init_index--;
+			break;
+			
+			case RIGHT:
+				init_index++;
+			break;
+		}
+		
+		init_index = mod(init_index, maze.tile_size);
+		
+	}while(key != ENTER);
+	
+	return init_index;
 }
