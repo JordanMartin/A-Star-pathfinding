@@ -14,8 +14,9 @@ inline float heuristic(const Maze& maze, const Tile& t1, const Tile& t2){
 	return sqrt((t2.altitude - t1.altitude)*(t2.altitude - t1.altitude) + dist*dist);
 }
 
-bool compare_heuristic(const std::pair<float,int>& t1, const std::pair<float,int>& t2){
-	return t1.first >= t2.first;
+// Fonction de comparaison pour la prio  
+bool compare_heuristic(const std::pair<float, int>& t1, const std::pair<float ,int>& t2){
+	return t1.first <= t1.first;
 }
 
 ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_data, float& search_time, bool step_by_step){
@@ -45,8 +46,8 @@ ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_d
 	}
 	
 	// File de prio (par tas binaire)
-	std::priority_queue<std::pair<int,int>, 
-						std::vector<std::pair<int,int> >, 
+	std::priority_queue<std::pair<float,int>, 
+						std::vector<std::pair<float,int> >, 
 						decltype(&compare_heuristic)> list_grey(compare_heuristic);
 		
 	// Commence avec la première case 

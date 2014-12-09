@@ -21,7 +21,6 @@ struct ASNODE {
 	int parent_index; // -1 = Pas de parent
 	float g_cost; // Meilleure distance depuis le noeud de départ  (-1 = infini)
 	float h_cost; // Distance heuristique
-	float f_cost; // Distance heuristique
 	ASColor color;
 };
 

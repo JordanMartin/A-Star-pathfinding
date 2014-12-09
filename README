@@ -6,7 +6,7 @@
 ==================================
 INFORMATIONS
 ==================================
-Le programme compile sans warnings (ceux présents sont ceux du coup fournit)
+Le programme compile sans warnings (ceux présents sont ceux du code fournit)
 Testé avec valgrind sans fuites mémoires.
 
 ==================================
