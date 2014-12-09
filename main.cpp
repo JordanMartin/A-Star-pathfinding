@@ -28,7 +28,7 @@ void display_grid(const Maze& maze, int highlight_start_index = -1, int highligh
 void start_astar(Maze& maze);
 
 /**
- * Selectionne uen case avec les flèches 
+ * Selectionne uen case avec les flêches 
  * 
  * @param start_index Si supérieur à -1 affiche en vert cette case 
  * @param end_index   Si supérieur à -1 affiche en bleu cette case 
@@ -173,8 +173,7 @@ inline int coord_to_index(const Maze& maze, int x, int y){
 
 
 void new_empty_grid(Maze& maze){
-	
-	int nb_walls;
+
 	set_grid_size(maze);
 	maze_grid_init(maze, maze.height, maze.width);
 	
@@ -334,22 +333,26 @@ void start_astar(Maze& maze){
 	PathData path_data;
 	
 	int start_index = 0, end_index = 0;
-	int start_coord[2], end_coord[2];
-	int readed;
 		
 	start_index = interactive_select_tile(maze, "Selectionner la case de départ", -1, -1);
-	cout << start_index << endl;
-	end_index = interactive_select_tile(maze, "Selectionner la case d'arrivée", start_index, -1);
-	cout << end_index << endl;	
+	end_index = interactive_select_tile(maze, "Selectionner la case d'arrivée", start_index, -1);	
 	
+	bool step_by_step;
+	cout << "Afficher la recherche étape par étape ? (1: Oui, 0: Non) : ";
+	cin >> step_by_step;
 	
 	float search_time;
-	ASNODE* nodes = astar(maze, start_index, end_index, path_data, search_time);
+	ASNODE* nodes = astar(maze, start_index, end_index, path_data, search_time, step_by_step);
 	
 	cout << endl;
 	
 	if(nodes[end_index].parent_index != -1){
-		printf("Chemin trouvé en %.2fms\n", search_time);	
+		if(step_by_step){
+			printf("Chemin trouvé\n");	
+		}else{
+			printf("Chemin trouvé en %.2fms\n", search_time);	
+		}
+		
 	}else{
 		cout << "Chemin non trouvé !" << endl;
 	}
@@ -362,9 +365,11 @@ void start_astar(Maze& maze){
 }
 
 void press_key_to_continue(){
-	cout << endl << endl << "[Appuyer sur une touche pour continuer]";
 	cin.ignore(INT_MAX, '\n');
+	cout << endl << endl << "[Appuyer sur une touche pour continuer]";
+	system("stty -icanon");		
 	getchar();
+	system("stty icanon");		
 }
 
 KeyPress listen_direction_key(void* args, 
@@ -381,7 +386,6 @@ KeyPress listen_direction_key(void* args,
 	char c;
 	char hist[5];
 	int hist_pos = 0;
-	int choice;
 	
 	KeyPress last_pressed = UNDEFINED;
 		
@@ -408,12 +412,12 @@ KeyPress listen_direction_key(void* args,
 				
 				case 67: 
 					if(on_right != NULL) on_right(args);
-					last_pressed = last_pressed = RIGHT;
+					last_pressed = RIGHT;
 				break;
 				
 				case 68: 
 					if(on_left != NULL) on_left(args);
-					last_pressed = last_pressed = LEFT;
+					last_pressed = LEFT;
 				break;
 			}
 		}
@@ -458,6 +462,8 @@ int interactive_select_tile(Maze& maze, string msg, int start_index, int end_ind
 			case RIGHT:
 				init_index++;
 			break;
+			
+			default: break;
 		}
 		
 		init_index = mod(init_index, maze.tile_size);

@@ -75,7 +75,7 @@ void maze_break_walls_clever(Maze & maze, int supp_wall_count) {
 	
 	srand(time(NULL));
   
-	int i, j, index;
+	int i, j;
 	UFNode* neighbor_node = new UFNode[4];
 	
 	// Initialise les arbres de chaque case

@@ -1,0 +1,51 @@
+==================================
+*         TP 10 - Astar          *
+* Jules Sauvinet & Jordan Martin *
+==================================
+
+==================================
+INFORMATIONS
+==================================
+Le programme compile sans warnings (ceux présents sont ceux du coup fournit)
+Testé avec valgrind sans fuites mémoires.
+
+==================================
+ ! AVANT D'EXECUTER LE PROGRAMME !
+==================================
+Pour obtenir un affichage optimal, la police utilisée dans le terminal 
+qui éxecutera le programme doit être de type monospace (Ex: monospace, 
+DejaVu Sans Mono, Courier New...)
+
+==================================
+COMPILATION
+==================================
+
+ - Compilation du programme principale : make astar
+	-> génère ./astar
+
+==================================
+FONCTIONNALITES
+==================================
+
+- Sélection interactive des cases
+
+	1. Utilisation des flêches du clavier pour selectionner une case 
+	
+	
+- Génération/modifcation d'une grille
+
+	1. Taille de la grille configurable
+	2. Grille sans murs
+	3. Grille avec tous les murs
+	4. Grille générée aléatoirement en cassant un nombre configurable de 
+	   murs suplémentaire
+	5. Modifier les murs et l'altitude d'une case
+ 
+- Chercher un chemin optimal avec Astar
+
+	1. Case de départ et d'arrivé configurable
+	2. Affichage des différentes étapes de la recherche
+	3. Affichage du temps de recherche
+		Case grise = case découverte via un voisin
+		Case orange = case visitée
+

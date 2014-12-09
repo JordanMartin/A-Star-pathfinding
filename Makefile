@@ -1,21 +1,13 @@
 CC = g++ 
-# try with 
-CFLAGS = -g -ansi -std=c++11
-EXEC_NAME_TEST = maze
+CFLAGS = -g -Wall -ansi -std=c++11
 EXEC_NAME = astar
 
 default: $(EXEC_NAME)
 
 $(EXEC_NAME): main.o maze.o astar.o union_find.o maze_path.o maze_grid.o
 	$(CC) $(CFLAGS) -o $(EXEC_NAME) main.o maze.o astar.o union_find.o maze_path.o maze_grid.o
-	
-$(EXEC_NAME_TEST): test_maze.o maze.o astar.o union_find.o maze_path.o maze_grid.o
-	$(CC) $(CFLAGS) -o $(EXEC_NAME_TEST) test_maze.o maze.o astar.o union_find.o maze_path.o maze_grid.o
 
 main.o: main.cpp
-	$(CC) $(CFLAGS) -o $@ -c $<
-
-test_maze.o: test_maze.cpp
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 maze.o: maze.cpp
@@ -38,4 +30,4 @@ simple: CFLAGS += -DMAZE_SIMPLE_DISPLAY
 simple: clean $(EXEC_NAME)
 
 clean:
-	rm -rf test_maze.o main.o maze.o astar.o union_find.o maze_path.o maze_grid.o $(EXEC_NAME) $(EXEC_NAME_TEST)
+	rm -rf test_maze.o main.o maze.o astar.o union_find.o maze_path.o maze_grid.o $(EXEC_NAME)

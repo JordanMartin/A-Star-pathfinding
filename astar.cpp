@@ -1,6 +1,5 @@
 #include "astar.hpp"
 
-
 //Calcule la distance euclidienne 
 inline float heuristic(const Maze& maze, const Tile& t1, const Tile& t2){
 	
@@ -16,11 +15,10 @@ inline float heuristic(const Maze& maze, const Tile& t1, const Tile& t2){
 }
 
 bool compare_heuristic(const std::pair<float,int>& t1, const std::pair<float,int>& t2){
-	
-	return t1.first > t2.first;
+	return t1.first >= t2.first;
 }
 
-ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_data, float& search_time){
+ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_data, float& search_time, bool step_by_step){
 		
 	/* Initilise l'affichage du chemin (fait avant la première 
 	 * mesure du temps pour ne pas les fausser */
@@ -43,7 +41,7 @@ ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_d
 		nodes[i].color = WHITE;
 		nodes[i].parent_index = -1;
 		nodes[i].g_cost = 0;
-		nodes[i].h_cost = heuristic(maze, maze.tiles[i], maze.tiles[end_index]);
+		nodes[i].h_cost = 0;
 	}
 	
 	// File de prio (par tas binaire)
@@ -55,14 +53,14 @@ ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_d
 	list_grey.push(std::make_pair(0, start_index));
 		
 	bool way_founded = false;
-	int curr_g_cost;
+	float curr_g_cost;
 	
 	// g(x) distance estimée (heuristique) depuis la case x à la case d'arrivée
 	// h(x) distance de la case de départ à la case x
 	// f(x) = h(x) + g(x)
 	
 	while(!list_grey.empty()){
-			
+
 		// Selection de la case ayant l'heuristique la plus faible
 		Tile& curr_tile = maze.tiles[list_grey.top().second];
 		ASNODE& curr_node = nodes[curr_tile.index];
@@ -93,6 +91,7 @@ ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_d
 				continue;
 			}
 			
+			curr_neighbor_node.h_cost = heuristic(maze, curr_neighbor_tile, maze.tiles[end_index]);
 			//La distance depuis le départ du noeud courant					
 			curr_g_cost = curr_node.g_cost 
 				+ sqrt(1 + pow(curr_neighbor_tile.altitude - curr_tile.altitude, 2));	
@@ -116,7 +115,24 @@ ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_d
 				curr_neighbor_node.color = GREY;
 				path_data.status[curr_neighbor_tile.index] = MAZE_PATH_SEARCHED;
 				
-				maze_grid_print_path(maze, maze.height, maze.width, path_data);
+				if(step_by_step){						
+					system("clear");
+					
+					path_data.status[start_index] = MAZE_PATH_START;
+					path_data.status[end_index] = MAZE_PATH_END;
+					maze_grid_print_path(maze, maze.height, maze.width, path_data);
+					std::cout << std::endl << std::endl << "[Appuyez ou laisser appuyez sur entrée pour afficher l'étape suivante]\n";
+					std::cout << "Appuyez sur autre touche pour terminer la recherche";
+					
+					system("stty -icanon");
+					
+					if(getchar() != 10){
+						step_by_step = false;
+						system("clear");
+					}
+					
+					system("stty icanon");					
+				}
 			}
 		}
 	}

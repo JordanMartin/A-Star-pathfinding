@@ -23,24 +23,30 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=3
-FILE_NAME_0=20;C++;0;EUTF-8;1;1;0;%2Fhome%2Fjordan%2FDesktop%2FLIF9-Projet%2Fastar.cpp;0;4
-FILE_NAME_1=534;C++;0;EUTF-8;1;1;0;%2Fhome%2Fjordan%2FDesktop%2FLIF9-Projet%2Fastar.hpp;0;4
-FILE_NAME_2=531;C++;0;EUTF-8;1;1;0;%2Fhome%2Fjordan%2FDesktop%2FLIF9-Projet%2Fmaze.cpp;0;4
-FILE_NAME_3=9909;C++;0;EUTF-8;1;1;0;%2Fhome%2Fjordan%2FDesktop%2FLIF9-Projet%2Fmain.cpp;0;4
-FILE_NAME_4=119;C++;0;EUTF-8;1;1;0;%2Fhome%2Fjordan%2FDesktop%2FLIF9-Projet%2Ftest_maze.cpp;0;4
+current_page=2
+FILE_NAME_0=359;None;0;EUTF-8;1;1;0;%2Fhome%2Fjordan%2FDesktop%2FLIF9-Projet%2FTODO;0;4
+FILE_NAME_1=11294;C++;0;EUTF-8;1;1;0;%2Fhome%2Fjordan%2FDesktop%2FLIF9-Projet%2Fmain.cpp;0;4
+FILE_NAME_2=577;C++;0;EUTF-8;1;1;0;%2Fhome%2Fjordan%2FDesktop%2FLIF9-Projet%2Fastar.cpp;0;4
+FILE_NAME_3=161;C++;0;EUTF-8;1;1;0;%2Fhome%2Fjordan%2FDesktop%2FLIF9-Projet%2Fastar.hpp;0;4
+FILE_NAME_4=484;C++;0;EUTF-8;1;1;0;%2Fhome%2Fjordan%2FDesktop%2FLIF9-Projet%2Fmaze_grid.hpp;0;4
+FILE_NAME_5=982;C++;0;EUTF-8;1;1;0;%2Fhome%2Fjordan%2FDesktop%2FLIF9-Projet%2Fmaze_path.cpp;0;4
+FILE_NAME_6=298;C++;0;EUTF-8;1;1;0;%2Fhome%2Fjordan%2FDesktop%2FLIF9-Projet%2Fmaze_path.hpp;0;4
+FILE_NAME_7=1250;None;0;EUTF-8;1;1;0;%2Fhome%2Fjordan%2FDesktop%2FLIF9-Projet%2FREADME;0;4
+FILE_NAME_8=28;Make;0;EUTF-8;1;1;0;%2Fhome%2Fjordan%2FDesktop%2FLIF9-Projet%2FMakefile;0;4
+FILE_NAME_9=2086;C++;0;EUTF-8;1;1;0;%2Fhome%2Fjordan%2FDesktop%2FLIF9-Projet%2Fmaze.cpp;0;4
+FILE_NAME_10=4584;C++;0;EUTF-8;1;1;0;%2Fhome%2Fjordan%2FDesktop%2FLIF9-Projet%2Fmaze_grid.cpp;0;4
 
 [VTE]
 last_dir=/home
 
 [build-menu]
 EX_00_LB=_Exécuter
-EX_00_CM=make && ./maze
+EX_00_CM=make && ./astar
 EX_00_WD=
 C++FT_00_LB=_Compiler
-C++FT_00_CM=make && ./maze
+C++FT_00_CM=make clean && make
 C++FT_00_WD=
 C++FT_01_LB=Const_ruire
-C++FT_01_CM=make && ./maze
+C++FT_01_CM=make clean && make
 C++FT_01_WD=
 filetypes=C++;

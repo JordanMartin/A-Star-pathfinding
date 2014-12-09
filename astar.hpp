@@ -7,6 +7,7 @@
 #include <vector>
 #include <iostream>
 #include <queue>
+#include <climits>
 
 #include "maze.hpp"
 #include "maze_path.hpp"
@@ -18,12 +19,13 @@ enum ASColor { BLACK, GREY, WHITE };
 struct ASNODE {
 	
 	int parent_index; // -1 = Pas de parent
-	int g_cost; // Meilleure distance depuis le noeud de départ  (-1 = infini)
+	float g_cost; // Meilleure distance depuis le noeud de départ  (-1 = infini)
 	float h_cost; // Distance heuristique
+	float f_cost; // Distance heuristique
 	ASColor color;
 };
 
-ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_data, float& search_time);
+ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_data, float& search_time, bool step_by_step);
 
 
 #endif
