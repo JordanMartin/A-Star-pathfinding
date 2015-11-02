@@ -9,15 +9,20 @@
 #include <queue>
 #include <climits>
 
+#ifdef __MACH__
+#include <mach/clock.h>
+#include <mach/mach.h>
+#endif
+
 #include "maze.hpp"
 #include "maze_path.hpp"
 
-typedef int index;
+//typedef int index;
 
 enum ASColor { BLACK, GREY, WHITE };
 //TODO FIX NAME
 struct ASNODE {
-	
+
 	int parent_index; // -1 = Pas de parent
 	float g_cost; // Meilleure distance depuis le noeud de départ  (-1 = infini)
 	float h_cost; // Distance heuristique
@@ -25,6 +30,7 @@ struct ASNODE {
 };
 
 ASNODE* astar(const Maze& maze, int start_index, int end_index, PathData& path_data, float& search_time, bool step_by_step);
+void getRealTime(struct timespec*);
 
 
 #endif
